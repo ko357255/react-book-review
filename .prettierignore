@@ -1,0 +1,20 @@
+# ビルド成果物
+dist
+build
+
+# 依存ファイル
+node_modules
+
+# ロックファイルなど
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# 環境関連
+.env
+.env.*
+
+# その他フォーマット対象外にしたいファイルやフォルダ
+coverage
+public
+*.snap
