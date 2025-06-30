@@ -1,20 +1,26 @@
-# ビルド成果物
+# ビルド関連
 dist
 build
 
 # 依存ファイル
 node_modules
 
-# ロックファイルなど
-package-lock.json
-pnpm-lock.yaml
-yarn.lock
+# TypeScript 関連
+tsconfig*.json
 
-# 環境関連
-.env
-.env.*
+# Vite 設定
+vite.config.ts
 
-# その他フォーマット対象外にしたいファイルやフォルダ
-coverage
-public
-*.snap
+# ESLint 設定（JS ファイルで書いてるので Prettier 対象から除外したほうが無難）
+eslint.config.js
+
+# HTML・CSS を無視したい場合（任意）
+*.html
+*.css
+
+# ドキュメント
+README.md
+
+# Prettier 自体の設定ファイル（Prettier に整形されないように）
+.prettierrc
+.prettierignore
