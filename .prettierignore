@@ -24,3 +24,5 @@ README.md
 # Prettier 自体の設定ファイル（Prettier に整形されないように）
 .prettierrc
 .prettierignore
+
+package*.json
