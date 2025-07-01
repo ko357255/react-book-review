@@ -1,6 +1,6 @@
 import Sidebar from "@/components/Sidebar";
 import Home from "@/pages/Home";
-import LogIn from "@/pages/LogIn";
+import Login from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
 import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -8,11 +8,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 const Router = () => {
   return (
     <BrowserRouter>
+      {/* サイドバー(左) */}
       <Sidebar />
-      <div className="main-content flex-grow-1 p-4">
+      {/* メインコンテンツ(右) */}
+      <div className="main-content flex-grow-1 p-5">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LogIn />} />
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

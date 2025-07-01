@@ -2,7 +2,7 @@ import '@/components/Sidebar.css';
 
 const Sidebar = () => {
   return (
-    <div className="sidebar bg-dark text-white p-3">
+    <div className="sidebar bg-dark text-white p-4">
       <nav>
         <h4>サイドバー</h4>
         <ul>
