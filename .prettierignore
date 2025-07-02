@@ -14,10 +14,6 @@ vite.config.ts
 # ESLint 設定（JS ファイルで書いてるので Prettier 対象から除外したほうが無難）
 eslint.config.js
 
-# HTML・CSS を無視したい場合（任意）
-*.html
-*.css
-
 # ドキュメント
 README.md
 
