@@ -39,7 +39,7 @@ const LoginForm = () => {
     <Form onSubmit={handleSubmit}>
       {/* メールアドレス */}
       <Form.Group className="mb-3" controlId="email">
-        <Form.Label>Email</Form.Label>
+        <Form.Label>メールアドレス</Form.Label>
         <Form.Control
           type="email"
           placeholder="Email"
@@ -50,7 +50,7 @@ const LoginForm = () => {
 
       {/* パスワード */}
       <Form.Group className="mb-3" controlId="password">
-        <Form.Label>Password</Form.Label>
+        <Form.Label>パスワード</Form.Label>
         <Form.Control
           type="password"
           placeholder="Password"
@@ -70,7 +70,7 @@ const LoginForm = () => {
 
       {/* ログインボタン */}
       <Button variant="primary" type="submit">
-        Login
+        ログイン
       </Button>
     </Form>
   );
