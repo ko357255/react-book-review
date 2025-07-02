@@ -1,9 +1,10 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Sidebar from '@/components/Sidebar';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 import NotFound from '@/pages/NotFound';
+import SignUp from '@/pages/SignUp';
 import './index.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 const Router = () => {
   return (
@@ -15,6 +16,7 @@ const Router = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/SignUp" element={<SignUp />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

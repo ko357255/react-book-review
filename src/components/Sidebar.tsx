@@ -1,4 +1,5 @@
 import '@/components/Sidebar.css';
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
@@ -6,8 +7,15 @@ const Sidebar = () => {
       <nav>
         <h4>サイドバー</h4>
         <ul>
-          <li>ホーム</li>
-          <li>ログイン</li>
+          <li>
+            <Link to={'/'}>ホーム</Link>
+          </li>
+          <li>
+            <Link to={'/login'}>ログイン</Link>
+          </li>
+          <li>
+            <Link to={'/signup'}>新規登録</Link>
+          </li>
         </ul>
       </nav>
     </div>
