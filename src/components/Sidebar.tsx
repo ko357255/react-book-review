@@ -1,23 +1,34 @@
-import '@/components/Sidebar.css';
+import { Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
-    <div className="sidebar bg-dark text-white p-4">
-      <nav>
-        <h4>サイドバー</h4>
-        <ul>
-          <li>
-            <Link to={'/'}>ホーム</Link>
-          </li>
-          <li>
-            <Link to={'/login'}>ログイン</Link>
-          </li>
-          <li>
-            <Link to={'/signup'}>新規登録</Link>
-          </li>
-        </ul>
-      </nav>
+    <div
+      className="sidebar bg-dark text-white p-4"
+      style={{
+        width: '220px',
+        height: '100vh',
+      }}
+    >
+      <h4>サイドバー</h4>
+      <Nav className="flex-column">
+        <Nav.Item>
+          {/* asを使用し、Linkとして扱う */}
+          <Nav.Link as={Link} to="/">
+            ホーム
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link as={Link} to="/login">
+            ログイン
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link as={Link} to="/signup">
+            新規登録
+          </Nav.Link>
+        </Nav.Item>
+      </Nav>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { Alert, Button, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 
 interface SignUpFormData {
@@ -14,8 +14,8 @@ const SignUpForm = () => {
     formState: { errors, touchedFields },
     watch,
   } = useForm<SignUpFormData>({
-		mode: 'onChange',
-	});
+    mode: 'all',
+  });
 
   // フォーム送信時の処理
   const onSubmit = (data: SignUpFormData) => {
@@ -46,8 +46,8 @@ const SignUpForm = () => {
           isInvalid={Boolean(errors.email)} // !!errors.emailでも可
           isValid={touchedFields.email && Boolean(!errors.email?.message)}
         />
+        {/* エラーメッセージ */}
         <Form.Control.Feedback type="invalid">
-          {/* エラーがあれば、エラー文を表示 */}
           {errors.email && errors.email.message}
         </Form.Control.Feedback>
       </Form.Group>
@@ -61,15 +61,13 @@ const SignUpForm = () => {
           {...register('password', {
             required: 'パスワードを入力してください',
           })}
+          isInvalid={Boolean(errors.password)}
+          isValid={touchedFields.password && Boolean(!errors.password?.message)}
         />
+        <Form.Control.Feedback type="invalid">
+          {errors.password && errors.password.message}
+        </Form.Control.Feedback>
       </Form.Group>
-
-      {/* パスワードエラー */}
-      {errors.password && (
-        <Alert variant="danger" className="py-2 px-3">
-          {errors.password.message}
-        </Alert>
-      )}
 
       {/* 再確認パスワード */}
       <Form.Group className="mb-3" controlId="confirmPassword">
@@ -83,19 +81,20 @@ const SignUpForm = () => {
               value, // カスタムバリデーション
             ) => value === password || 'パスワードが一致しません',
           })}
+          isInvalid={Boolean(errors.confirmPassword)}
+          isValid={
+            touchedFields.confirmPassword &&
+            Boolean(!errors.confirmPassword?.message)
+          }
         />
+        <Form.Control.Feedback type="invalid">
+          {errors.confirmPassword && errors.confirmPassword.message}
+        </Form.Control.Feedback>
       </Form.Group>
-
-      {/* 再確認パスワードエラー */}
-      {errors.confirmPassword && (
-        <Alert variant="danger" className="py-2 px-3">
-          {errors.confirmPassword.message}
-        </Alert>
-      )}
 
       {/* サインアップボタン */}
       <Button variant="primary" type="submit">
-        サインアップ
+        新規登録
       </Button>
     </Form>
   );
