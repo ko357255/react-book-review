@@ -1,9 +1,9 @@
-import { Alert, Button, Form } from "react-bootstrap";
-import { useState, type FormEvent } from "react";
+import { Alert, Button, Form } from 'react-bootstrap';
+import { useState, type FormEvent } from 'react';
 
 const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
   // const [isLoading, setIsLoading] = useState(false);
 
@@ -11,10 +11,10 @@ const LoginForm = () => {
     const errors: string[] = [];
 
     if (email.length === 0) {
-      errors.push("メールアドレスを入力してください");
+      errors.push('メールアドレスを入力してください');
     }
     if (password.length === 0) {
-      errors.push("パスワードを入力してください");
+      errors.push('パスワードを入力してください');
     }
 
     if (errors.length > 0) {

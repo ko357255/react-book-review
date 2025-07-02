@@ -1,9 +1,9 @@
-import Sidebar from "@/components/Sidebar";
-import Home from "@/pages/Home";
-import Login from "@/pages/Login";
-import NotFound from "@/pages/NotFound";
-import "./index.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Sidebar from '@/components/Sidebar';
+import Home from '@/pages/Home';
+import Login from '@/pages/Login';
+import NotFound from '@/pages/NotFound';
+import './index.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 const Router = () => {
   return (

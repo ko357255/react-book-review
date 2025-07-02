@@ -6,8 +6,8 @@ const Sidebar = () => {
       <nav>
         <h4>サイドバー</h4>
         <ul>
-            <li>ホーム</li>
-            <li>ログイン</li>
+          <li>ホーム</li>
+          <li>ログイン</li>
         </ul>
       </nav>
     </div>
