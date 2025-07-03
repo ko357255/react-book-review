@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Image } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 
 interface SignUpFormData {
   email: string;
   password: string;
   confirmPassword: string;
-  icon: File;
+  icon: FileList;
 }
 
 const SignUpForm = () => {
@@ -31,7 +31,10 @@ const SignUpForm = () => {
   const icon = watch('icon');
 
   useEffect(() => {
-    if (!icon || icon.length === 0) return;
+    if (!icon || icon.length === 0) {
+      setIconUrl(null);
+      return;
+    }
 
     const render = new FileReader();
     render.onload = () => {
@@ -126,8 +129,17 @@ const SignUpForm = () => {
         </Form.Control.Feedback>
       </Form.Group>
       {iconUrl && (
-        <div>
-          <img src={iconUrl} alt="" />
+        <div className="mb-3">
+          <Image
+            src={iconUrl}
+            width={200}
+            height={200}
+            roundedCircle
+            style={{
+              objectFit: 'cover',
+              objectPosition: 'cover',
+            }}
+          />
         </div>
       )}
 
