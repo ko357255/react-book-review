@@ -1,8 +1,10 @@
+// import { UserCreate } from '@/api/api';
 import { useEffect, useState } from 'react';
 import { Button, Form, Image } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 
 interface SignUpFormData {
+  name: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -22,8 +24,16 @@ const SignUpForm = () => {
   });
 
   // フォーム送信時の処理
-  const onSubmit = (data: SignUpFormData) => {
-    console.log(data);
+  const onSubmit = ({ name, email, password, icon }: SignUpFormData) => {
+    console.log(name,email,password,icon);
+    // const signUp = async () => {
+    //   try {
+    //     const taken = await UserCreate({name, email, password});
+        
+    //   } catch(e) {
+
+    //   }
+    // };
   };
 
   // 入力を監視
@@ -46,12 +56,31 @@ const SignUpForm = () => {
 
   return (
     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+      {/* 名前 */}
+      <Form.Group className="mb-3" controlId="name">
+        <Form.Label>ユーザー名</Form.Label>
+        <Form.Control
+          required
+          type="text"
+          placeholder=""
+          {...register('name', {
+            required: 'ユーザー名を入力してください',
+          })}
+          // エラースタイル
+          isInvalid={Boolean(errors.name)} // !!errors.emailでも可
+          isValid={touchedFields.name && Boolean(!errors.name?.message)}
+        />
+        {/* エラーメッセージ */}
+        <Form.Control.Feedback type="invalid">
+          {errors.name && errors.name.message}
+        </Form.Control.Feedback>
+      </Form.Group>
+
       {/* メールアドレス */}
       <Form.Group className="mb-3" controlId="email">
         <Form.Label>メールアドレス</Form.Label>
         <Form.Control
           required
-          id="email"
           type="email"
           placeholder="example@email.com"
           {...register('email', {
@@ -75,7 +104,6 @@ const SignUpForm = () => {
       <Form.Group className="mb-3" controlId="password">
         <Form.Label>パスワード</Form.Label>
         <Form.Control
-          id="password"
           type="password"
           {...register('password', {
             required: 'パスワードを入力してください',
@@ -92,7 +120,6 @@ const SignUpForm = () => {
       <Form.Group className="mb-3" controlId="confirmPassword">
         <Form.Label>パスワード(再確認)</Form.Label>
         <Form.Control
-          id="confirmPassword"
           type="password"
           {...register('confirmPassword', {
             required: 'パスワード(再確認)を入力してください',
@@ -115,7 +142,6 @@ const SignUpForm = () => {
       <Form.Group className="mb-3" controlId="icon">
         <Form.Label>アイコン</Form.Label>
         <Form.Control
-          id="icon"
           type="file"
           accept="image/*"
           {...register('icon', {
@@ -134,7 +160,7 @@ const SignUpForm = () => {
             src={iconUrl}
             width={200}
             height={200}
-            roundedCircle
+            rounded
             style={{
               objectFit: 'cover',
               objectPosition: 'cover',
