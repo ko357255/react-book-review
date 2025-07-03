@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 
@@ -5,13 +6,16 @@ interface SignUpFormData {
   email: string;
   password: string;
   confirmPassword: string;
+  icon: File;
 }
 
 const SignUpForm = () => {
+  const [iconUrl, setIconUrl] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
-    formState: { errors, touchedFields },
+    formState: { errors, touchedFields, dirtyFields },
     watch,
   } = useForm<SignUpFormData>({
     mode: 'all',
@@ -22,8 +26,20 @@ const SignUpForm = () => {
     console.log(data);
   };
 
-  // パスワードの入力を監視
+  // 入力を監視
   const password = watch('password');
+  const icon = watch('icon');
+
+  useEffect(() => {
+    if (!icon || icon.length === 0) return;
+
+    const render = new FileReader();
+    render.onload = () => {
+      setIconUrl(render.result as string);
+    };
+    console.log(icon);
+    render.readAsDataURL(icon[0]);
+  }, [icon]);
 
   return (
     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -91,6 +107,29 @@ const SignUpForm = () => {
           {errors.confirmPassword && errors.confirmPassword.message}
         </Form.Control.Feedback>
       </Form.Group>
+
+      {/* アイコン */}
+      <Form.Group className="mb-3" controlId="icon">
+        <Form.Label>アイコン</Form.Label>
+        <Form.Control
+          id="icon"
+          type="file"
+          accept="image/*"
+          {...register('icon', {
+            required: 'アイコンを設定してください',
+          })}
+          isInvalid={Boolean(errors.icon)}
+          isValid={dirtyFields.icon && Boolean(!errors.icon?.message)}
+        />
+        <Form.Control.Feedback type="invalid">
+          {errors.icon && errors.icon.message}
+        </Form.Control.Feedback>
+      </Form.Group>
+      {iconUrl && (
+        <div>
+          <img src={iconUrl} alt="" />
+        </div>
+      )}
 
       {/* サインアップボタン */}
       <Button variant="primary" type="submit">
