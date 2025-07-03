@@ -31,6 +31,7 @@ export const UserCreate = async (
     throw new Error('不明なエラーが発生しました');
   }
 };
+<<<<<<< HEAD
 
 interface IconUploadResponse {
   iconUrl: string;
@@ -62,3 +63,5 @@ export const IconUpload = async (
     throw new Error('不明なエラーが発生しました');
   }
 };
+=======
+>>>>>>> 7921ddf171b1cbde7f0dbed6eacf31b2b9af5652
