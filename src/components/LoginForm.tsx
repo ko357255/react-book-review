@@ -3,7 +3,7 @@ import { Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import FormField from './FormField';
-import { signin } from '@/api/api';
+import { signin } from '@/api/user';
 
 interface LoginFormData {
   email: string;
