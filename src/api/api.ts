@@ -15,6 +15,15 @@ interface IconUploadResponse {
   iconUrl: string;
 }
 
+interface SigninRequest {
+  email: string;
+  password: string;
+}
+
+interface SigninResponse {
+  token: string;
+}
+
 // 共通のエラーハンドリング
 // エラーを整形して発生させる
 const handleError = (e: unknown): never => {
@@ -35,12 +44,12 @@ const handleError = (e: unknown): never => {
 };
 
 // ユーザー作成関数
-export const UserCreate = async (
+export const userCreate = async (
   userData: UserCreateRequest,
 ): Promise<UserCreateResponse> => {
   try {
     const response = await axiosInstance.post('/users', userData);
-    return response.data;
+    return response.data; // axiosでは.json()は不要
 
     // axios では HTTPステータスコードもエラーとなるため
     // response.ok は不要
@@ -51,7 +60,7 @@ export const UserCreate = async (
 };
 
 // アイコンアップロード関数
-export const IconUpload = async (
+export const iconUpload = async (
   token: string,
   file: File | Blob,
 ): Promise<IconUploadResponse> => {
@@ -66,7 +75,21 @@ export const IconUpload = async (
       },
     });
     return response.data;
-  } catch (e) {
+  } catch (e: unknown) {
+    return handleError(e);
+  }
+};
+
+export const signin = async (
+  userData: SigninRequest,
+): Promise<SigninResponse> => {
+  try {
+    const response = await axiosInstance.post('/signin', userData);
+
+    // ローカルストレージにトークンをセット
+    localStorage.setItem('authToken', response.data);
+    return response.data;
+  } catch (e: unknown) {
     return handleError(e);
   }
 };
