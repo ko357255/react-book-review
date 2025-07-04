@@ -12,7 +12,12 @@ const Router = () => {
       {/* サイドバー(左) */}
       <Sidebar />
       {/* メインコンテンツ(右) */}
-      <div className="main-content flex-grow-1 p-5">
+      <div
+        className="main-content flex-grow-1 p-5 overflow-y-auto"
+        style={{
+          height: '100vh',
+        }}
+      >
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
