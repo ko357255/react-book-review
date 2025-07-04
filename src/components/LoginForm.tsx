@@ -1,77 +1,91 @@
-import { Alert, Button, Form } from 'react-bootstrap';
-import { useState, type FormEvent } from 'react';
+import { useState } from 'react';
+import { Button, Form } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import FormField from './FormField';
+import { signin } from '@/api/api';
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
 const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<string[]>([]);
-  // const [isLoading, setIsLoading] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, touchedFields },
+  } = useForm<LoginFormData>({
+    mode: 'all',
+  });
 
-  const validate = (email: string, password: string) => {
-    const errors: string[] = [];
+  const navigate = useNavigate();
 
-    if (email.length === 0) {
-      errors.push('メールアドレスを入力してください');
+  const onSubmit = async ({ email, password }: LoginFormData) => {
+    setFormError(null);
+    setIsLoading(true);
+
+    try {
+      const { token } = await signin({ email, password });
+
+      alert(`Token: ${token}`);
+      navigate('/');
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setFormError(e.message);
+      } else {
+        setFormError('予期せぬエラーが発生しました');
+      }
+    } finally {
+      setIsLoading(false);
     }
-    if (password.length === 0) {
-      errors.push('パスワードを入力してください');
-    }
-
-    if (errors.length > 0) {
-      setErrors(errors);
-      return false;
-    }
-
-    return { email, password };
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setErrors([]);
-
-    const isValid = validate(email, password);
-    if (!isValid) return;
-
-    alert(`Email: ${email}, Pass: ${password}`);
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form noValidate onSubmit={handleSubmit(onSubmit)}>
       {/* メールアドレス */}
-      <Form.Group className="mb-3" controlId="email">
-        <Form.Label>メールアドレス</Form.Label>
-        <Form.Control
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </Form.Group>
+      <FormField
+        label="メールアドレス"
+        id="email"
+        type="email"
+        placeholder="example@email.com"
+        registerProps={register('email', {
+          required: 'メールアドレスを入力してください',
+          pattern: {
+            value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+            message: '有効なメールアドレスを入力してください',
+          },
+        })}
+        error={errors.email?.message}
+        isTouched={touchedFields.email}
+      />
 
       {/* パスワード */}
-      <Form.Group className="mb-3" controlId="password">
-        <Form.Label>パスワード</Form.Label>
-        <Form.Control
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </Form.Group>
-
-      {/* エラーメッセージ */}
-      {errors.length > 0 && (
-        <Alert variant="danger" className="py-2 px-3">
-          {errors.map((msg, i) => (
-            <div key={i}>{msg}</div>
-          ))}
-        </Alert>
-      )}
+      <FormField
+        label="パスワード"
+        id="password"
+        type="password"
+        registerProps={register('password', {
+          required: 'パスワードを入力してください',
+        })}
+        error={errors.password?.message}
+        isTouched={touchedFields.password}
+      />
 
       {/* ログインボタン */}
-      <Button variant="primary" type="submit">
+      <Button
+        variant="primary"
+        type="submit"
+        className="mb-3"
+        disabled={isLoading}
+      >
         ログイン
       </Button>
+
+      {/* フォームエラー */}
+      {formError && <div className="text-danger">{formError}</div>}
     </Form>
   );
 };
