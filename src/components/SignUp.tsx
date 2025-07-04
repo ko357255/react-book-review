@@ -1,10 +1,10 @@
-import { IconUpload, UserCreate } from '@/api/api';
-import Compressor from 'compressorjs';
 import { useEffect, useState } from 'react';
 import { Button, Form, Image } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import Compressor from 'compressorjs';
 import { useNavigate } from 'react-router-dom';
 import FormField from './FormField';
+import { iconUpload, userCreate } from '@/api/api';
 
 interface SignUpFormData {
   name: string;
@@ -15,7 +15,7 @@ interface SignUpFormData {
 }
 
 const SignUpForm = () => {
-  const [apiError, setApiError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [iconUrl, setIconUrl] = useState<string | null>(null);
   const [compresedIcon, setCompresedIcon] = useState<File | Blob | null>(null);
@@ -34,22 +34,25 @@ const SignUpForm = () => {
   // フォーム送信時の処理
   const onSubmit = async ({ name, email, password }: SignUpFormData) => {
     if (!compresedIcon) {
-      setApiError('アイコンが選択されていません');
+      setFormError('アイコンが選択されていません');
       return;
     }
 
-    setApiError(null);
+    setFormError(null);
     setIsLoading(true);
     try {
-      const { token } = await UserCreate({ name, email, password });
-
-      await IconUpload(token, compresedIcon);
+      // サインアップ
+      const { token } = await userCreate({ name, email, password });
+      // アイコンアップロード
+      await iconUpload(token, compresedIcon);
 
       alert('新規登録が完了しました');
       navigate('/login');
     } catch (e: unknown) {
       if (e instanceof Error) {
-        setApiError(e.message);
+        setFormError(e.message);
+      } else {
+        setFormError('予期せぬエラーが発生しました');
       }
     } finally {
       setIsLoading(false);
@@ -89,6 +92,7 @@ const SignUpForm = () => {
   }, [icon]);
 
   return (
+    // noValidate: ブラウザのバリデートをオフ
     // onSubmit にはフォームの値が渡される
     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
       {/* 名前 */}
@@ -189,7 +193,8 @@ const SignUpForm = () => {
         新規登録
       </Button>
 
-      {apiError && <div className="text-danger">{apiError}</div>}
+      {/* フォームエラー */}
+      {formError && <div className="text-danger">{formError}</div>}
     </Form>
   );
 };
