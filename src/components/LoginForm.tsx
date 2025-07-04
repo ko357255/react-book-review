@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import FormField from './FormField';
+import FormField from '@/components/FormField';
 import { signin } from '@/api/user';
 
 interface LoginFormData {

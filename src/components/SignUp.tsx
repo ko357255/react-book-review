@@ -3,7 +3,7 @@ import { Button, Form, Image } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import Compressor from 'compressorjs';
 import { useNavigate } from 'react-router-dom';
-import FormField from './FormField';
+import FormField from '@/components/FormField';
 import { iconUpload, userCreate } from '@/api/user';
 
 interface SignUpFormData {
