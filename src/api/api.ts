@@ -11,34 +11,49 @@ interface UserCreateResponse {
   token: string;
 }
 
+interface IconUploadResponse {
+  iconUrl: string;
+}
+
+// 共通のエラーハンドリング
+// エラーを整形して発生させる
+const handleError = (e: unknown): never => {
+  let errorMessage = '予期せぬエラーが発生しました';
+
+  if (isAxiosError(e)) {
+    // axiosではエラーが AxiosError となる
+    if (e.response) {
+      // レスポンスがある場合
+      errorMessage = e.response.data?.ErrorMessageJP || e.message;
+    } else if (e.request) {
+      // リクエストはあるけどレスポンスがない場合
+      errorMessage = 'ネットワークエラーが発生しました';
+    }
+  }
+  // 整形したエラーを投げる
+  throw new Error(errorMessage);
+};
+
+// ユーザー作成関数
 export const UserCreate = async (
   userData: UserCreateRequest,
 ): Promise<UserCreateResponse> => {
   try {
     const response = await axiosInstance.post('/users', userData);
     return response.data;
+
+    // axios では HTTPステータスコードもエラーとなるため
+    // response.ok は不要
   } catch (e: unknown) {
-    if (isAxiosError(e)) {
-      if (e.response) {
-        // レスポンスがある場合
-        throw e;
-      } else if (e.request) {
-        // リクエストはあるけど、レスポンスがない場合
-        throw new Error('ネットワークエラーが発生しました');
-      }
-    }
-    // それ以外の場合
-    throw new Error('不明なエラーが発生しました');
+    // 整形したエラーを返す
+    return handleError(e);
   }
 };
 
-interface IconUploadResponse {
-  iconUrl: string;
-}
-
+// アイコンアップロード関数
 export const IconUpload = async (
   token: string,
-  file: File,
+  file: File | Blob,
 ): Promise<IconUploadResponse> => {
   const formData = new FormData();
   formData.append('icon', file);
@@ -52,13 +67,6 @@ export const IconUpload = async (
     });
     return response.data;
   } catch (e) {
-    if (isAxiosError(e)) {
-      if (e.response) {
-        throw e;
-      } else if (e.request) {
-        throw new Error('ネットワークエラーが発生しました');
-      }
-    }
-    throw new Error('不明なエラーが発生しました');
+    return handleError(e);
   }
 };
