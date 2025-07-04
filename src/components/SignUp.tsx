@@ -1,7 +1,10 @@
-// import { UserCreate } from '@/api/api';
+import { IconUpload, UserCreate } from '@/api/api';
+import Compressor from 'compressorjs';
 import { useEffect, useState } from 'react';
 import { Button, Form, Image } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import FormField from './FormField';
 
 interface SignUpFormData {
   name: string;
@@ -12,155 +15,162 @@ interface SignUpFormData {
 }
 
 const SignUpForm = () => {
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [iconUrl, setIconUrl] = useState<string | null>(null);
+  const [compresedIcon, setCompresedIcon] = useState<File | Blob | null>(null);
+
+  const navigate = useNavigate();
 
   const {
-    register,
-    handleSubmit,
-    formState: { errors, touchedFields, dirtyFields },
-    watch,
+    register, // 登録関数
+    handleSubmit, // 送信時の関数
+    formState: { errors, touchedFields },
+    watch, // 値の監視関数
   } = useForm<SignUpFormData>({
     mode: 'all',
   });
 
   // フォーム送信時の処理
-  const onSubmit = ({ name, email, password, icon }: SignUpFormData) => {
-    console.log(name,email,password,icon);
-    // const signUp = async () => {
-    //   try {
-    //     const taken = await UserCreate({name, email, password});
-        
-    //   } catch(e) {
+  const onSubmit = async ({ name, email, password }: SignUpFormData) => {
+    if (!compresedIcon) {
+      setApiError('アイコンが選択されていません');
+      return;
+    }
 
-    //   }
-    // };
+    setApiError(null);
+    setIsLoading(true);
+    try {
+      const { token } = await UserCreate({ name, email, password });
+
+      await IconUpload(token, compresedIcon);
+
+      alert('新規登録が完了しました');
+      navigate('/login');
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setApiError(e.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // 入力を監視
   const password = watch('password');
   const icon = watch('icon');
 
+  // compresedIconを描写する
   useEffect(() => {
-    if (!icon || icon.length === 0) {
+    if (!compresedIcon) {
       setIconUrl(null);
       return;
     }
-
     const render = new FileReader();
     render.onload = () => {
       setIconUrl(render.result as string);
     };
-    console.log(icon);
-    render.readAsDataURL(icon[0]);
+    render.readAsDataURL(compresedIcon);
+  }, [compresedIcon]);
+
+  // 画像の圧縮
+  useEffect(() => {
+    if (!icon || icon.length === 0) {
+      setCompresedIcon(null);
+      return;
+    }
+    new Compressor(icon[0], {
+      convertSize: 1024, // 1M未満に圧縮
+      success: (result) => {
+        // result には File が入る
+        setCompresedIcon(result);
+      },
+    });
   }, [icon]);
 
   return (
+    // onSubmit にはフォームの値が渡される
     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
       {/* 名前 */}
-      <Form.Group className="mb-3" controlId="name">
-        <Form.Label>ユーザー名</Form.Label>
-        <Form.Control
-          required
-          type="text"
-          placeholder=""
-          {...register('name', {
-            required: 'ユーザー名を入力してください',
-          })}
-          // エラースタイル
-          isInvalid={Boolean(errors.name)} // !!errors.emailでも可
-          isValid={touchedFields.name && Boolean(!errors.name?.message)}
-        />
-        {/* エラーメッセージ */}
-        <Form.Control.Feedback type="invalid">
-          {errors.name && errors.name.message}
-        </Form.Control.Feedback>
-      </Form.Group>
+      <FormField
+        label="ユーザー名"
+        id="name"
+        type="text"
+        placeholder=""
+        registerProps={register('name', {
+          required: 'ユーザー名を入力してください',
+        })}
+        error={errors.name?.message}
+        isTouched={touchedFields.name}
+      ></FormField>
 
       {/* メールアドレス */}
-      <Form.Group className="mb-3" controlId="email">
-        <Form.Label>メールアドレス</Form.Label>
-        <Form.Control
-          required
-          type="email"
-          placeholder="example@email.com"
-          {...register('email', {
-            required: 'メールアドレスを入力してください',
-            pattern: {
-              value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-              message: '有効なメールアドレスを入力してください',
-            },
-          })}
-          // エラースタイル
-          isInvalid={Boolean(errors.email)} // !!errors.emailでも可
-          isValid={touchedFields.email && Boolean(!errors.email?.message)}
-        />
-        {/* エラーメッセージ */}
-        <Form.Control.Feedback type="invalid">
-          {errors.email && errors.email.message}
-        </Form.Control.Feedback>
-      </Form.Group>
+      <FormField
+        label="メールアドレス"
+        id="email"
+        type="email"
+        placeholder="example@email.com"
+        registerProps={register('email', {
+          required: 'メールアドレスを入力してください',
+          pattern: {
+            value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+            message: '有効なメールアドレスを入力してください',
+          },
+        })}
+        error={errors.email?.message}
+        isTouched={touchedFields.email}
+      />
 
       {/* パスワード */}
-      <Form.Group className="mb-3" controlId="password">
-        <Form.Label>パスワード</Form.Label>
-        <Form.Control
-          type="password"
-          {...register('password', {
-            required: 'パスワードを入力してください',
-          })}
-          isInvalid={Boolean(errors.password)}
-          isValid={touchedFields.password && Boolean(!errors.password?.message)}
-        />
-        <Form.Control.Feedback type="invalid">
-          {errors.password && errors.password.message}
-        </Form.Control.Feedback>
-      </Form.Group>
+      <FormField
+        label="パスワード"
+        id="password"
+        type="password"
+        registerProps={register('password', {
+          required: 'パスワードを入力してください',
+        })}
+        error={errors.password?.message}
+        isTouched={touchedFields.password}
+      />
 
-      {/* 再確認パスワード */}
-      <Form.Group className="mb-3" controlId="confirmPassword">
-        <Form.Label>パスワード(再確認)</Form.Label>
-        <Form.Control
-          type="password"
-          {...register('confirmPassword', {
-            required: 'パスワード(再確認)を入力してください',
-            validate: (
-              value, // カスタムバリデーション
-            ) => value === password || 'パスワードが一致しません',
-          })}
-          isInvalid={Boolean(errors.confirmPassword)}
-          isValid={
-            touchedFields.confirmPassword &&
-            Boolean(!errors.confirmPassword?.message)
-          }
-        />
-        <Form.Control.Feedback type="invalid">
-          {errors.confirmPassword && errors.confirmPassword.message}
-        </Form.Control.Feedback>
-      </Form.Group>
+      {/* パスワード */}
+      <FormField
+        label="パスワード(再確認)"
+        id="confirmPassword"
+        type="password"
+        registerProps={register('confirmPassword', {
+          required: 'パスワード(再確認)を入力してください',
+          validate: (
+            value, // カスタムバリデーション
+          ) => value === password || 'パスワードが一致しません',
+        })}
+        error={errors.confirmPassword?.message}
+        isTouched={touchedFields.confirmPassword}
+      />
 
       {/* アイコン */}
-      <Form.Group className="mb-3" controlId="icon">
-        <Form.Label>アイコン</Form.Label>
-        <Form.Control
-          type="file"
-          accept="image/*"
-          {...register('icon', {
-            required: 'アイコンを設定してください',
-          })}
-          isInvalid={Boolean(errors.icon)}
-          isValid={dirtyFields.icon && Boolean(!errors.icon?.message)}
-        />
-        <Form.Control.Feedback type="invalid">
-          {errors.icon && errors.icon.message}
-        </Form.Control.Feedback>
-      </Form.Group>
-      {iconUrl && (
+      <FormField
+        label="アイコン"
+        id="icon"
+        type="file"
+        accept="image/*"
+        registerProps={register('icon', {
+          required: 'アイコンを設定してください',
+        })}
+        error={errors.icon?.message}
+        isTouched={touchedFields.icon}
+      />
+
+      {/* アイコンプレビュー */}
+      {icon && icon[0] && iconUrl && (
         <div className="mb-3">
           <Image
             src={iconUrl}
+            alt={icon[0].name || '無題のアイコン'}
             width={200}
             height={200}
             rounded
+            className="border border-dark"
             style={{
               objectFit: 'cover',
               objectPosition: 'cover',
@@ -170,9 +180,16 @@ const SignUpForm = () => {
       )}
 
       {/* サインアップボタン */}
-      <Button variant="primary" type="submit">
+      <Button
+        variant="primary"
+        type="submit"
+        className="mb-3"
+        disabled={isLoading}
+      >
         新規登録
       </Button>
+
+      {apiError && <div className="text-danger">{apiError}</div>}
     </Form>
   );
 };
