@@ -1,5 +1,7 @@
 import axiosInstance from '@/api/axiosInstance';
 import handleError from '@/api/handleError';
+import { setToken } from '@/store/auth';
+import { useDispatch } from 'react-redux';
 
 interface UserCreateRequest {
   name: string;
@@ -68,7 +70,10 @@ export const signin = async (
     const response = await axiosInstance.post('/signin', userData);
 
     // ローカルストレージにトークンをセット
-    localStorage.setItem('authToken', response.data);
+    localStorage.setItem('authToken', response.data.token);
+    // storeにトークンをセット
+    const dispatch = useDispatch();
+    dispatch(setToken(response.data.token));
     return response.data;
   } catch (e: unknown) {
     return handleError(e);

@@ -1,3 +1,4 @@
+import { store } from '@/store';
 import axios from 'axios';
 
 // axiosインスタンスを生成
@@ -6,6 +7,18 @@ const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+});
+
+// axios リクエストの共通処理
+axiosInstance.interceptors.request.use((config) => {
+  // useSelector() はコンポーネント内でしか使えないため
+  // store.getState()を使用する
+  const token = store.getState().auth.token;
+  if (token) {
+    // ヘッダーに認証情報を付与
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
 });
 
 export default axiosInstance;
