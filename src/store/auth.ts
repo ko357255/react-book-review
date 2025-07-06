@@ -23,7 +23,6 @@ const authSlice = createSlice({
     // ログアウト時
     logout: (state) => {
       state.token = null;
-      localStorage.removeItem('authToken');
     },
   },
 });
