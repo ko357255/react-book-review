@@ -1,19 +1,16 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/store';
 import Sidebar from '@/components/Sidebar';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 import NotFound from '@/pages/NotFound';
 import SignUp from '@/pages/SignUp';
+import Reviews from '@/pages/Reviews';
 import './index.css';
 
 const Router = () => {
-  // const [auth, setAuth] = useState<boolean>(false);
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem('authToken');
-  //   setAuth(!!token);
-  // }, []);
-
+  const auth = useSelector((state: RootState) => state.auth.token !== null);
   return (
     <BrowserRouter>
       {/* サイドバー(左) */}
@@ -28,14 +25,17 @@ const Router = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/" element={<Home />} />
 
-          {/* { ? (
-            // ログイン中
+          {auth ? (
+            // ログイン中のみ
+            <>
+              <Route path="/" element={<Home />} />
+              <Route path="/reviews" element={<Reviews />} />
+            </>
           ) : (
             // <Navigate> 描写すると遷移する
             <Route path="/" element={<Navigate to="/login" replace />} />
-          )} */}
+          )}
 
           <Route path="*" element={<NotFound />} />
         </Routes>

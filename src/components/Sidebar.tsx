@@ -39,6 +39,9 @@ const Sidebar = () => {
             <Nav.Link as={Link} to="/">
               ホーム
             </Nav.Link>
+            <Nav.Link as={Link} to="/reviews">
+              書籍レビュー
+            </Nav.Link>
           </>
         ) : (
           <>
