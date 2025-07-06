@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import FormField from '@/components/FormField';
 import { signin } from '@/api/user';
+import { useDispatch } from 'react-redux';
+import { setToken } from '@/store/auth';
 
 interface LoginFormData {
   email: string;
@@ -22,6 +24,7 @@ const LoginForm = () => {
   });
 
   const navigate = useNavigate();
+  const dispath = useDispatch();
 
   const onSubmit = async ({ email, password }: LoginFormData) => {
     setFormError(null);
@@ -30,7 +33,10 @@ const LoginForm = () => {
     try {
       const { token } = await signin({ email, password });
 
-      alert(`Token: ${token}`);
+      // ローカルストレージとStoreにトークンをセット
+      localStorage.setItem('authToken', token);
+      dispath(setToken(token));
+
       navigate('/');
     } catch (e: unknown) {
       if (e instanceof Error) {
