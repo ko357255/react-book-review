@@ -1,7 +1,7 @@
 import axiosInstance from '@/api/axiosInstance';
 import handleError from '@/api/handleError';
 
-interface Book {
+export interface BookData {
   id: string;
   title: string;
   url: string;
@@ -11,11 +11,11 @@ interface Book {
   isMine: boolean;
 }
 
-export const bookGet = async (offset: number = 0): Promise<Book> => {
+export const bookGet = async (offset: number = 0): Promise<BookData[]> => {
   const token = localStorage.getItem('authToken');
 
   try {
-    const response = await axiosInstance.get('/book', {
+    const response = await axiosInstance.get('/books', {
       params: {
         offset: offset,
       },
