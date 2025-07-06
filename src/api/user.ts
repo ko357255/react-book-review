@@ -1,7 +1,5 @@
 import axiosInstance from '@/api/axiosInstance';
 import handleError from '@/api/handleError';
-import { setToken } from '@/store/auth';
-import { useDispatch } from 'react-redux';
 
 interface UserCreateRequest {
   name: string;
@@ -68,12 +66,8 @@ export const signin = async (
 ): Promise<SigninResponse> => {
   try {
     const response = await axiosInstance.post('/signin', userData);
-
-    // ローカルストレージにトークンをセット
-    localStorage.setItem('authToken', response.data.token);
-    // storeにトークンをセット
-    const dispatch = useDispatch();
-    dispatch(setToken(response.data.token));
+    // 純粋な関数にするため、ここではlocalStorageやReduxの処理はせず、
+    // 呼び出し元のコンポーネントで行う
     return response.data;
   } catch (e: unknown) {
     return handleError(e);
