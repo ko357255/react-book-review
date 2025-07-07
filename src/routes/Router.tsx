@@ -28,6 +28,10 @@ const Router = () => {
             <>
               <Route path="/" element={<Home />} />
               <Route path="/reviews" element={<Reviews />} />
+
+              {/* リダイレクト */}
+              <Route path="/login" element={<Navigate to="/reviews" replace />} />
+              <Route path="/signup" element={<Navigate to="/reviews" replace />} />
             </>
           ) : (
             // ログアウト中
