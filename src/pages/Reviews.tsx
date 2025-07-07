@@ -11,10 +11,10 @@ const Reviews = () => {
       <BookList offset={offset} />
       <div className="d-flex justify-content-center">
         <Button variant="primary" onClick={() => setOffset(offset - 10)} disabled={offset <= 0 }>
-          ←
+          {'<'}
         </Button>
         <Button variant="primary" onClick={() => setOffset(offset + 10)}>
-          →
+          {'>'}
         </Button>
       </div>
     </div>

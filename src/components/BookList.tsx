@@ -10,7 +10,7 @@ const BookList = ({ offset }: { offset: number }) => {
     data: books,
     isLoading,
     isError,
-    error,
+    error, // エラー時は３回再試行を行った後、エラーが入る
   } = useQuery({
     // 異なるキャッシュかどうかを判別するための値
     queryKey: ['books', offset],
