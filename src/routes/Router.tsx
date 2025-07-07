@@ -23,18 +23,25 @@ const Router = () => {
         }}
       >
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-
           {auth ? (
-            // ログイン中のみ
+            // ログイン中
             <>
               <Route path="/" element={<Home />} />
               <Route path="/reviews" element={<Reviews />} />
+
+              {/* リダイレクト */}
+              <Route path="/login" element={<Navigate to="/" replace />} />
+              <Route path="/signup" element={<Navigate to="/" replace />} />
             </>
           ) : (
-            // <Navigate> 描写すると遷移する
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            // ログアウト中
+            <>
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<SignUp />} />
+
+              {/* リダイレクト */}
+              <Route path="/" element={<Navigate to="/login" replace />} />
+            </>
           )}
 
           <Route path="*" element={<NotFound />} />
