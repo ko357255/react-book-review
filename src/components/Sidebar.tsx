@@ -22,7 +22,7 @@ const Sidebar = () => {
     <div
       className="sidebar d-flex flex-column bg-dark text-white p-4"
       style={{
-        width: '220px',
+        minWidth: '220px',
         height: '100vh',
       }}
     >
