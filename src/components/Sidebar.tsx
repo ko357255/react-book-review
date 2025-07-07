@@ -18,6 +18,11 @@ const Sidebar = () => {
     navigate('/login', { replace: true });
   };
 
+  const linkStyle: React.CSSProperties = {
+    borderBottom: '2px solid var(--bs-gray-700)',
+    textAlign: 'left', // 左寄せ
+  };
+
   return (
     <div
       className="sidebar d-flex flex-column bg-dark text-white p-4"
@@ -36,22 +41,22 @@ const Sidebar = () => {
         {auth ? (
           <>
             {/* asを使用し、Linkとして扱う */}
-            <Nav.Link as={Link} to="/">
+            <Nav.Link as={Link} to="/" style={linkStyle}>
               ホーム
             </Nav.Link>
-            <Nav.Link as={Link} to="/reviews">
+            <Nav.Link as={Link} to="/reviews" style={linkStyle}>
               書籍レビュー
             </Nav.Link>
           </>
         ) : (
           <>
             <Nav.Item>
-              <Nav.Link as={Link} to="/login">
+              <Nav.Link as={Link} to="/login" style={linkStyle}>
                 ログイン
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link as={Link} to="/signup">
+              <Nav.Link as={Link} to="/signup" style={linkStyle}>
                 新規登録
               </Nav.Link>
             </Nav.Item>
@@ -59,10 +64,7 @@ const Sidebar = () => {
         )}
       </Nav>
       {auth && (
-        <Button
-          onClick={handleOnClick}
-          variant="outline-primary"
-        >
+        <Button onClick={handleOnClick} variant="outline-primary">
           ログアウト
         </Button>
       )}
