@@ -73,3 +73,16 @@ export const signin = async (
     return handleError(e);
   }
 };
+
+export const userGet = async (token: string | null) => {
+  try {
+    const response = await axiosInstance.get('/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (e: unknown) {
+    return handleError(e);
+  }
+};
