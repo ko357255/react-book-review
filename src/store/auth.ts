@@ -1,14 +1,41 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { userGet } from '@/api/user';
+import {
+  createAsyncThunk,
+  createSlice,
+  type PayloadAction,
+} from '@reduxjs/toolkit';
+
+interface UserData {
+  name: string;
+}
 
 interface AuthState {
   token: string | null;
-  user: null;
+  user: null | UserData;
+  isLoading: boolean;
 }
 
 const initialState: AuthState = {
   token: localStorage.getItem('authToken') ?? null,
   user: null,
+  isLoading: false,
 };
+
+export const fetchUser = createAsyncThunk(
+  'auth/fetch',
+  async (token: string, thunkAPI) => {
+    try {
+      const response = await userGet(token);
+      return response.data;
+    } catch (e: unknown) {
+      let errorMessage = '予期せぬエラーが発生しました';
+      if (e instanceof Error) {
+        errorMessage = e.message;
+      }
+      return thunkAPI.rejectWithValue(errorMessage);
+    }
+  },
+);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -27,10 +54,28 @@ const authSlice = createSlice({
       state.token = null;
     },
   },
+  // AsyncThunkから受け付けるReducer
+  extraReducers: (builder) => {
+    builder
+      // 開始時
+      .addCase(fetchUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      // 終了時
+      .addCase(
+        fetchUser.fulfilled,
+        (state, action: PayloadAction<UserData | null>) => {
+          state.isLoading = false;
+          state.user = action.payload;
+        },
+      )
+      // エラー時
+      .addCase(fetchUser.rejected, (state) => {
+        state.isLoading = false;
+      });
+  },
 });
 
 export const { setToken, setTokenFromLocalStorage, logout } = authSlice.actions;
-
-export default authSlice;
-
-
+const authReducer = authSlice.reducer;
+export default authReducer;
