@@ -36,8 +36,8 @@ const LoginForm = () => {
       // ローカルストレージとStoreにトークンをセット
       localStorage.setItem('authToken', token);
       dispath(setToken(token));
-
-      navigate('/');
+      
+      navigate('/reviews');
     } catch (e: unknown) {
       if (e instanceof Error) {
         setFormError(e.message);
