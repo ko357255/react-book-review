@@ -7,16 +7,15 @@ const Reviews = () => {
 
   return (
     <div className="reviews">
+      <h2>書籍レビュー一覧</h2>
       <BookList offset={offset} />
       <div className="d-flex justify-content-center">
+        <Button variant="primary" onClick={() => setOffset(offset - 10)} disabled={offset <= 0 }>
+          ←
+        </Button>
         <Button variant="primary" onClick={() => setOffset(offset + 10)}>
           →
         </Button>
-        {offset > 0 && (
-          <Button variant="secondary" onClick={() => setOffset(offset - 10)}>
-            ←
-          </Button>
-        )}
       </div>
     </div>
   );
