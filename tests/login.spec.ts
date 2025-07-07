@@ -11,14 +11,14 @@ test.describe('ログインフォームのバリデーション', () => {
     const loginButton = page.locator('button[type="submit"]');
     await loginButton.click(); // クリック
 
-    const errorAlert = page.locator('div[role="alert"]');
-
-    // .toHaveText(): テキストを持っている
-    await expect(errorAlert.locator('div:nth-child(1)')).toHaveText(
-      'メールアドレスを入力してください',
-    );
-    // .not.toBeVisible(): 表示されていない
-    await expect(errorAlert.locator('div:nth-child(2)')).not.toBeVisible();
+    // メールアドレスのエラーメッセージが表示されることを確認
+    // + : 直後の隣の要素を取得する
+    const emailError = page.locator('input#email + .invalid-feedback');
+    await expect(emailError).toHaveText('メールアドレスを入力してください');
+    
+    // パスワードフィールドのエラーメッセージが表示されないことを確認
+    const passwordError = page.locator('input#password + .invalid-feedback');
+    await expect(passwordError).not.toBeVisible();
   });
 
   test('パスワード未入力エラーが表示されるかどうか', async ({ page }) => {
@@ -29,11 +29,11 @@ test.describe('ログインフォームのバリデーション', () => {
     const loginButton = page.locator('button[type="submit"]');
     await loginButton.click();
 
-    const errorAlert = page.locator('div[role="alert"]');
-    await expect(errorAlert.locator('div:nth-child(1)')).toHaveText(
-      'パスワードを入力してください',
-    );
-    await expect(errorAlert.locator('div:nth-child(2)')).not.toBeVisible();
+    const passwordError = page.locator('input#password + .invalid-feedback');
+    await expect(passwordError).toHaveText('パスワードを入力してください');
+    
+    const emailError = page.locator('input#email + .invalid-feedback');
+    await expect(emailError).not.toBeVisible();
   });
 
   test('メールアドレスとパスワードの未入力エラーが表示されるかどうか', async ({
@@ -45,14 +45,11 @@ test.describe('ログインフォームのバリデーション', () => {
 
     await loginButton.click();
 
-    const errorAlert = page.locator('div[role="alert"]');
-
-    await expect(errorAlert.locator('div:nth-child(1)')).toHaveText(
-      'メールアドレスを入力してください',
-    );
-    await expect(errorAlert.locator('div:nth-child(2)')).toHaveText(
-      'パスワードを入力してください',
-    );
+    const emailError = page.locator('input#email + .invalid-feedback');
+    await expect(emailError).toHaveText('メールアドレスを入力してください');
+    
+    const passwordError = page.locator('input#password + .invalid-feedback');
+    await expect(passwordError).toHaveText('パスワードを入力してください');
   });
 
   test('メールアドレスとパスワード両方入力されている場合、エラーが表示されない', async ({
@@ -66,7 +63,10 @@ test.describe('ログインフォームのバリデーション', () => {
     const loginButton = page.locator('button[type="submit"]');
     await loginButton.click();
 
-    const errorAlert = page.locator('div[role="alert"]');
-    await expect(errorAlert).not.toBeVisible(); // エラーメッセージが表示されない
+    const emailError = page.locator('input#email + .invalid-feedback');
+    await expect(emailError).not.toBeVisible();
+
+    const passwordError = page.locator('input#password + .invalid-feedback');
+    await expect(passwordError).not.toBeVisible();
   });
 });
