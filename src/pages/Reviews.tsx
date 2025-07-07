@@ -1,6 +1,6 @@
 import BookList from '@/components/BookList';
+import PaginationButton from '@/components/PaginationButton';
 import { useState } from 'react';
-import { Button } from 'react-bootstrap';
 
 const Reviews = () => {
   const [offset, setOffset] = useState(0);
@@ -9,14 +9,11 @@ const Reviews = () => {
     <div className="reviews">
       <h2>書籍レビュー一覧</h2>
       <BookList offset={offset} />
-      <div className="d-flex justify-content-center">
-        <Button variant="primary" onClick={() => setOffset(offset - 10)} disabled={offset <= 0 }>
-          {'<'}
-        </Button>
-        <Button variant="primary" onClick={() => setOffset(offset + 10)}>
-          {'>'}
-        </Button>
-      </div>
+      <PaginationButton
+        prevOnClick={() => setOffset((prev) => prev - 10)}
+        nextOnClick={() => setOffset((prev) => prev + 10)}
+        prevDisabled={offset <= 0}
+      />
     </div>
   );
 };
