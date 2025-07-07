@@ -20,7 +20,7 @@ const Sidebar = () => {
 
   const linkStyle: React.CSSProperties = {
     borderBottom: '2px solid var(--bs-gray-700)',
-    textAlign: 'left', // 左寄せ
+    textAlign: 'left',
   };
 
   return (

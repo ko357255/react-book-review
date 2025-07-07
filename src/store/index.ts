@@ -10,6 +10,6 @@ export const store = configureStore({
   },
 });
 
-// 型を示すためのもの
+// 型を示すために使う
 export type RootState = ReturnType<typeof store.getState>; // stateの型
 export type AppDispatch = typeof store.dispatch; // dispatchの型
