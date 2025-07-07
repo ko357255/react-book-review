@@ -30,12 +30,3 @@ export const bookGet = async (offset: number = 0): Promise<BookData[]> => {
     return handleError(e);
   }
 };
-
-// export const bookGet = async (offset: number = 0): Promise<BookData[]> => {
-//   const response = await axiosInstance.get('/books', {
-//     params: {
-//       offset: offset,
-//     },
-//   });
-//   return response.data;
-// };
