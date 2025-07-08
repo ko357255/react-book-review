@@ -24,9 +24,17 @@ interface SigninResponse {
   token: string;
 }
 
-interface UserGetResponse {
+export interface UserGetResponse {
   name: string;
   iconUrl: string;
+}
+
+interface UserUpdateRequest {
+  name: string;
+}
+
+interface UserUpdateResponse {
+  name: string;
 }
 
 // ユーザー作成関数
@@ -79,13 +87,26 @@ export const signin = async (
   }
 };
 
-export const userGet = async (token: string | null): Promise<UserGetResponse | null> => {
+export const userGet = async (
+  token: string | null,
+): Promise<UserGetResponse> => {
   try {
     const response = await axiosInstance.get('/users', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+    return response.data;
+  } catch (e: unknown) {
+    return handleError(e);
+  }
+};
+
+export const userUpdate = async (
+  userData: UserUpdateRequest,
+): Promise<UserUpdateResponse> => {
+  try {
+    const response = await axiosInstance.put('/users', userData);
     return response.data;
   } catch (e: unknown) {
     return handleError(e);
