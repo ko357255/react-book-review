@@ -4,71 +4,76 @@ import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '@/store/auth';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
+import styled from '@emotion/styled';
+
+const SidebarStyle = styled.div`
+  min-width: 220px;
+  height: 100vh;
+`;
+
+const NavStyle = styled(Nav)`
+  height: 100%;
+`;
+
+const NavLinkStyle = styled(Nav.Link)`
+  border-bottom: 2px solid var(--bs-gray-700);
+  text-align: left;
+`;
+
+const LogoutStyle = styled(Button)`
+  width: 100%;
+`;
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.auth.token !== null);
 
-  const handleOnClick = () => {
+  const handleLogout = () => {
     // ログアウト処理
     dispatch(logout());
-    localStorage.removeItem('authToken');
+
     // 履歴を残さずログインに遷移
     navigate('/login', { replace: true });
   };
 
-  const linkStyle: React.CSSProperties = {
-    borderBottom: '2px solid var(--bs-gray-700)',
-    textAlign: 'left',
-  };
-
   return (
-    <div
-      className="sidebar d-flex flex-column bg-dark text-white p-4"
-      style={{
-        minWidth: '220px',
-        height: '100vh',
-      }}
-    >
-      <h4>サイドバー</h4>
-      <Nav
-        className="flex-column"
-        style={{
-          height: '100%',
-        }}
-      >
+    <SidebarStyle className="sidebar d-flex flex-column bg-dark text-white">
+      <h4 className="p-4">サイドバー</h4>
+      <NavStyle className="flex-column">
         {auth ? (
           <>
             {/* asを使用し、Linkとして扱う */}
-            <Nav.Link as={Link} to="/" style={linkStyle}>
+            <NavLinkStyle as={Link} to="/">
               ホーム
-            </Nav.Link>
-            <Nav.Link as={Link} to="/reviews" style={linkStyle}>
+            </NavLinkStyle>
+            <NavLinkStyle as={Link} to="/reviews">
               書籍レビュー
-            </Nav.Link>
+            </NavLinkStyle>
           </>
         ) : (
           <>
             <Nav.Item>
-              <Nav.Link as={Link} to="/login" style={linkStyle}>
+              <NavLinkStyle as={Link} to="/login">
                 ログイン
-              </Nav.Link>
+              </NavLinkStyle>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link as={Link} to="/signup" style={linkStyle}>
+              <NavLinkStyle as={Link} to="/signup">
                 新規登録
-              </Nav.Link>
+              </NavLinkStyle>
             </Nav.Item>
           </>
         )}
-      </Nav>
+      </NavStyle>
       {auth && (
-        <Button onClick={handleOnClick} variant="outline-primary">
-          ログアウト
-        </Button>
+        <div className="p-4">
+          <LogoutStyle onClick={handleLogout} variant="outline-primary">
+            ログアウト
+          </LogoutStyle>
+        </div>
       )}
-    </div>
+    </SidebarStyle>
   );
 };
 

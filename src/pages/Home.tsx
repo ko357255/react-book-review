@@ -1,4 +1,4 @@
-import TestItem from '@/components/TestItem';
+import StatePreview from '@/components/TestItem';
 import type { RootState } from '@/store';
 import { add, remove, set } from '@/store/test';
 import { useDispatch } from 'react-redux';
@@ -17,7 +17,7 @@ const Home = () => {
       <button onClick={() => dispatch(add())}>add</button>
       <button onClick={() => dispatch(remove())}>remove</button>
       <button onClick={() => dispatch(set(0))}>set</button>
-      <TestItem />
+      <StatePreview />
     </div>
   );
 };

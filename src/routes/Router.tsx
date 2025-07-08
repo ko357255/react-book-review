@@ -8,6 +8,11 @@ import NotFound from '@/pages/NotFound';
 import SignUp from '@/pages/SignUp';
 import Reviews from '@/pages/Reviews';
 import './index.css';
+import styled from '@emotion/styled';
+
+const MainContentStyle = styled.div`
+  height: 100vh;
+`;
 
 const Router = () => {
   const auth = useSelector((state: RootState) => state.auth.token !== null);
@@ -16,11 +21,8 @@ const Router = () => {
       {/* サイドバー(左) */}
       <Sidebar />
       {/* メインコンテンツ(右) */}
-      <div
+      <MainContentStyle
         className="main-content flex-grow-1 p-5 overflow-y-auto"
-        style={{
-          height: '100vh',
-        }}
       >
         <Routes>
           {auth ? (
@@ -30,8 +32,14 @@ const Router = () => {
               <Route path="/reviews" element={<Reviews />} />
 
               {/* リダイレクト */}
-              <Route path="/login" element={<Navigate to="/reviews" replace />} />
-              <Route path="/signup" element={<Navigate to="/reviews" replace />} />
+              <Route
+                path="/login"
+                element={<Navigate to="/reviews" replace />}
+              />
+              <Route
+                path="/signup"
+                element={<Navigate to="/reviews" replace />}
+              />
             </>
           ) : (
             // ログアウト中
@@ -46,7 +54,7 @@ const Router = () => {
 
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </div>
+      </MainContentStyle>
     </BrowserRouter>
   );
 };

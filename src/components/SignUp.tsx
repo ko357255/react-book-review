@@ -5,6 +5,7 @@ import Compressor from 'compressorjs';
 import { useNavigate } from 'react-router-dom';
 import FormField from '@/components/FormField';
 import { iconUpload, userCreate } from '@/api/user';
+import styled from '@emotion/styled';
 
 interface SignUpFormData {
   name: string;
@@ -13,6 +14,11 @@ interface SignUpFormData {
   confirmPassword: string;
   icon: FileList;
 }
+
+const IconStyle = styled(Image)`
+  object-fit: cover;
+  object-position: center;
+`;
 
 const SignUpForm = () => {
   const [formError, setFormError] = useState<string | null>(null);
@@ -168,17 +174,13 @@ const SignUpForm = () => {
       {/* アイコンプレビュー */}
       {icon && icon[0] && iconUrl && (
         <div className="mb-3">
-          <Image
+          <IconStyle
             src={iconUrl}
             alt={icon[0].name || '無題のアイコン'}
             width={200}
             height={200}
             rounded
             className="border border-dark"
-            style={{
-              objectFit: 'cover',
-              objectPosition: 'cover',
-            }}
           />
         </div>
       )}
