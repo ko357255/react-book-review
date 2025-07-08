@@ -5,7 +5,6 @@ import BookItem from '@/components/BookItem';
 import { useQuery } from '@tanstack/react-query';
 
 const BookList = ({ offset }: { offset: number }) => {
-
   const {
     data: books,
     isLoading,

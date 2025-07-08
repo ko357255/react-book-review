@@ -9,6 +9,7 @@ import SignUp from '@/pages/SignUp';
 import Reviews from '@/pages/Reviews';
 import styled from '@emotion/styled';
 import Profile from '@/pages/Profile';
+import NewReview from '@/pages/newReview';
 
 const MainContentStyle = styled.div`
   height: 100vh;
@@ -30,6 +31,7 @@ const Router = () => {
               <Route path="/" element={<Home />} />
               <Route path="/reviews" element={<Reviews />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/new" element={<NewReview />} />
 
               {/* リダイレクト */}
               <Route
