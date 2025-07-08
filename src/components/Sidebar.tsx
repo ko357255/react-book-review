@@ -25,7 +25,7 @@ const Sidebar = () => {
 
   return (
     <SidebarStyle className="sidebar d-flex flex-column bg-dark text-white">
-      <h4 className="p-4">サイドバー</h4>
+      <h4 className="p-4">書籍レビューサイト</h4>
       <NavStyle className="flex-column">
         {auth ? (
           <>
@@ -34,7 +34,7 @@ const Sidebar = () => {
               ホーム
             </NavLinkStyle>
             <NavLinkStyle as={Link} to="/reviews">
-              書籍レビュー
+              書籍レビュー一覧
             </NavLinkStyle>
             <NavLinkStyle as={Link} to="/profile">
               プロフィール編集
