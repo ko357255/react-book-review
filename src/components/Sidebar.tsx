@@ -28,6 +28,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.auth.token !== null);
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const handleLogout = () => {
     // ログアウト処理
@@ -64,6 +65,9 @@ const Sidebar = () => {
       </NavStyle>
       {auth && (
         <div className="p-4">
+          <div className='py-3'>
+            ログイン中 : {user?.name}
+          </div>
           <LogoutStyle onClick={handleLogout} variant="outline-primary">
             ログアウト
           </LogoutStyle>
