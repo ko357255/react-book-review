@@ -24,6 +24,11 @@ interface SigninResponse {
   token: string;
 }
 
+interface UserGetResponse {
+  name: string;
+  iconUrl: string;
+}
+
 // ユーザー作成関数
 export const userCreate = async (
   userData: UserCreateRequest,
@@ -74,9 +79,9 @@ export const signin = async (
   }
 };
 
-export const userGet = async (token: string | null) => {
+export const userGet = async (token: string | null): Promise<UserGetResponse | null> => {
   try {
-    const response = await axiosInstance.get('/user', {
+    const response = await axiosInstance.get('/users', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
