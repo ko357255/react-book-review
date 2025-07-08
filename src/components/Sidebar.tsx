@@ -53,16 +53,12 @@ const Sidebar = () => {
           </>
         ) : (
           <>
-            <Nav.Item>
-              <NavLinkStyle as={Link} to="/login">
-                ログイン
-              </NavLinkStyle>
-            </Nav.Item>
-            <Nav.Item>
-              <NavLinkStyle as={Link} to="/signup">
-                新規登録
-              </NavLinkStyle>
-            </Nav.Item>
+            <NavLinkStyle as={Link} to="/login">
+              ログイン
+            </NavLinkStyle>
+            <NavLinkStyle as={Link} to="/signup">
+              新規登録
+            </NavLinkStyle>
           </>
         )}
       </NavStyle>
