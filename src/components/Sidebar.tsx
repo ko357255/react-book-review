@@ -17,6 +17,7 @@ const NavStyle = styled(Nav)`
 const NavLinkStyle = styled(Nav.Link)`
   border-bottom: 2px solid var(--bs-gray-700);
   text-align: left;
+  color: white;
 `;
 
 const Sidebar = () => {

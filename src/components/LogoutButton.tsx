@@ -21,7 +21,7 @@ const LogoutButton = () => {
   };
 
   return (
-    <LogoutStyle onClick={handleLogout} variant="outline-primary">
+    <LogoutStyle onClick={handleLogout} variant="outline-light">
       ログアウト
     </LogoutStyle>
   );
