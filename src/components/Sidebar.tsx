@@ -51,6 +51,9 @@ const Sidebar = () => {
             <NavLinkStyle as={Link} to="/reviews">
               書籍レビュー
             </NavLinkStyle>
+            <NavLinkStyle as={Link} to="/profile">
+              プロフィール編集
+            </NavLinkStyle>
           </>
         ) : (
           <>
