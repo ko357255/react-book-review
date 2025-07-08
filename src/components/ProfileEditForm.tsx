@@ -1,51 +1,51 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import FormField from '@/components/FormField';
-import { signin } from '@/api/user';
-import { useDispatch } from 'react-redux';
-import { fetchUser, setToken } from '@/store/auth';
-import type { AppDispatch } from '@/store';
+import { userUpdate } from '@/api/user';
 import { useSelector } from 'react-redux';
-import { type RootState } from '@/store';
+import type { AppDispatch, RootState } from '@/store';
+import { useDispatch } from 'react-redux';
+import { fetchUser } from '@/store/auth';
 
-interface ProfileEditFormData {
-  email: string;
-  password: string;
+interface SignUpFormData {
+  name: string;
 }
 
 const ProfileEditForm = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const [formError, setFormError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, touchedFields },
-  } = useForm<ProfileEditFormData>({
-    mode: 'all',
-    defaultValues: {
-
-    },
-  });
 
   const user = useSelector((state: RootState) => state.auth.user);
 
-  const navigate = useNavigate();
-  const dispath = useDispatch<AppDispatch>();
+  const {
+    register,
+    handleSubmit,
+    reset, // 初期値変更関数
+    formState: { errors, touchedFields },
+  } = useForm<SignUpFormData>({
+    mode: 'all',
+    defaultValues: {
+      name: user?.name || '',
+    },
+  });
 
-  const onSubmit = async ({ email, password }: ProfileEditFormData) => {
+  useEffect(() => {
+    reset({ name: user?.name || '' });
+  }, [user, reset]);
+
+  // フォーム送信時の処理
+  const onSubmit = async ({ name }: SignUpFormData) => {
     setFormError(null);
     setIsLoading(true);
-
     try {
-      const { token } = await signin({ email, password });
+      // サインアップ
+      const { name: updateName } = await userUpdate({ name });
 
-      // トークンをストアとローカルストレージにセット
-      dispath(setToken(token));
-      dispath(fetchUser());
-
-      navigate('/reviews');
+      alert(`プロフィールを編集しました ${updateName}`);
+      dispatch(fetchUser());
     } catch (e: unknown) {
       if (e instanceof Error) {
         setFormError(e.message);
@@ -58,44 +58,30 @@ const ProfileEditForm = () => {
   };
 
   return (
+    // noValidate: ブラウザのバリデートをオフ
+    // onSubmit にはフォームの値が渡される
     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
-      {/* メールアドレス */}
+      {/* 名前 */}
       <FormField
-        label="メールアドレス"
-        id="email"
-        type="email"
-        placeholder="example@email.com"
-        registerProps={register('email', {
-          required: 'メールアドレスを入力してください',
-          pattern: {
-            value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-            message: '有効なメールアドレスを入力してください',
-          },
+        label="ユーザー名"
+        id="name"
+        type="text"
+        placeholder=""
+        registerProps={register('name', {
+          required: 'ユーザー名を入力してください',
         })}
-        error={errors.email?.message}
-        isTouched={touchedFields.email}
-      />
+        error={errors.name?.message}
+        isTouched={touchedFields.name}
+      ></FormField>
 
-      {/* パスワード */}
-      <FormField
-        label="パスワード"
-        id="password"
-        type="password"
-        registerProps={register('password', {
-          required: 'パスワードを入力してください',
-        })}
-        error={errors.password?.message}
-        isTouched={touchedFields.password}
-      />
-
-      {/* ログインボタン */}
+      {/* サインアップボタン */}
       <Button
         variant="primary"
         type="submit"
         className="mb-3"
         disabled={isLoading}
       >
-        ログイン
+        更新
       </Button>
 
       {/* フォームエラー */}
