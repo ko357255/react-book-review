@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import FormField from '@/components/FormField';
 import { signin } from '@/api/user';
 import { useDispatch } from 'react-redux';
-import { setToken } from '@/store/auth';
+import { fetchUser, setToken } from '@/store/auth';
+import type { AppDispatch } from '@/store';
 
 interface LoginFormData {
   email: string;
@@ -24,7 +25,7 @@ const LoginForm = () => {
   });
 
   const navigate = useNavigate();
-  const dispath = useDispatch();
+  const dispath = useDispatch<AppDispatch>();
 
   const onSubmit = async ({ email, password }: LoginFormData) => {
     setFormError(null);
@@ -33,9 +34,9 @@ const LoginForm = () => {
     try {
       const { token } = await signin({ email, password });
 
-      // ローカルストレージとStoreにトークンをセット
-      localStorage.setItem('authToken', token);
+      // トークンをストアとローカルストレージにセット
       dispath(setToken(token));
+      dispath(fetchUser());
       
       navigate('/reviews');
     } catch (e: unknown) {
