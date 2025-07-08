@@ -27,6 +27,7 @@ export const fetchUser = createAsyncThunk('auth/fetch', async (_, thunkAPI) => {
     // store.getState()は循環エラーとなるため使わない
     const store = thunkAPI.getState() as RootState;
     const token = store.auth.token;
+    if (!token) return null;
 
     const user = await userGet(token);
     return user;
