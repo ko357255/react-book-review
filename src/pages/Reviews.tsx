@@ -7,7 +7,13 @@ const Reviews = () => {
 
   return (
     <div className="reviews">
-      <h2 className='mb-3'>書籍レビュー一覧</h2>
+      <title>書籍レビュー | 一覧</title>
+      <meta
+        name="description"
+        content="書籍レビューサイトのレビュー一覧ページです。"
+      />
+
+      <h2 className="mb-3">書籍レビュー一覧</h2>
       <BookList offset={offset} />
       <PaginationButton
         prevOnClick={() => setOffset((prev) => prev - 10)}

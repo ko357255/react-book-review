@@ -12,6 +12,13 @@ const Home = () => {
 
   return (
     <div className="home">
+      {/* React19 ではそのままヘッダを設定できる */}
+      <title>書籍レビュー | ホーム</title>
+      <meta
+        name="description"
+        content="書籍レビューサイトのホームページです。"
+      />
+
       <h2 className="mb-3">ホーム</h2>
       <p>test: {value}</p>
       <button onClick={() => dispatch(add())}>add</button>
