@@ -7,11 +7,12 @@ import Login from '@/pages/Login';
 import NotFound from '@/pages/NotFound';
 import SignUp from '@/pages/SignUp';
 import Reviews from '@/pages/Reviews';
-import './index.css';
 import styled from '@emotion/styled';
+import Profile from '@/pages/Profile';
 
 const MainContentStyle = styled.div`
   height: 100vh;
+  background-color: white;
 `;
 
 const Router = () => {
@@ -21,15 +22,14 @@ const Router = () => {
       {/* サイドバー(左) */}
       <Sidebar />
       {/* メインコンテンツ(右) */}
-      <MainContentStyle
-        className="main-content flex-grow-1 p-5 overflow-y-auto"
-      >
+      <MainContentStyle className="main-content flex-grow-1 p-5 overflow-y-auto">
         <Routes>
           {auth ? (
             // ログイン中
             <>
               <Route path="/" element={<Home />} />
               <Route path="/reviews" element={<Reviews />} />
+              <Route path="/profile" element={<Profile />} />
 
               {/* リダイレクト */}
               <Route
