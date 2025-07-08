@@ -9,7 +9,7 @@ import SignUp from '@/pages/SignUp';
 import Reviews from '@/pages/Reviews';
 import styled from '@emotion/styled';
 import Profile from '@/pages/Profile';
-import NewReview from '@/pages/newReview';
+import NewReview from '@/pages/NewReview';
 
 const MainContentStyle = styled.div`
   height: 100vh;
