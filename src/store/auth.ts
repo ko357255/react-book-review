@@ -4,6 +4,7 @@ import {
   createSlice,
   type PayloadAction,
 } from '@reduxjs/toolkit';
+import type { RootState } from '@/store';
 
 interface UserData {
   name: string;
@@ -21,29 +22,31 @@ const initialState: AuthState = {
   isLoading: false,
 };
 
-export const fetchUser = createAsyncThunk(
-  'auth/fetch',
-  async (token: string, thunkAPI) => {
-    try {
-      const response = await userGet(token);
-      return response.data;
-    } catch (e: unknown) {
-      let errorMessage = '予期せぬエラーが発生しました';
-      if (e instanceof Error) {
-        errorMessage = e.message;
-      }
-      return thunkAPI.rejectWithValue(errorMessage);
+export const fetchUser = createAsyncThunk('auth/fetch', async (_, thunkAPI) => {
+  try {
+    // store.getState()は循環エラーとなるため使わない
+    const store = thunkAPI.getState() as RootState;
+    const token = store.auth.token;
+
+    const user = await userGet(token);
+    return user;
+  } catch (e: unknown) {
+    let errorMessage = '予期せぬエラーが発生しました';
+    if (e instanceof Error) {
+      errorMessage = e.message;
     }
-  },
-);
+    return thunkAPI.rejectWithValue(errorMessage);
+  }
+});
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     // ログイン時
-    setToken: (state, action: PayloadAction<string | null>) => {
+    setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
+      localStorage.setItem('authToken', action.payload);
     },
     // ローカルストレージを元にトークンをセット
     setTokenFromLocalStorage: (state) => {
@@ -52,6 +55,7 @@ const authSlice = createSlice({
     // ログアウト時
     logout: (state) => {
       state.token = null;
+      localStorage.removeItem('authToken');
     },
   },
   // AsyncThunkから受け付けるReducer
@@ -65,6 +69,7 @@ const authSlice = createSlice({
       .addCase(
         fetchUser.fulfilled,
         (state, action: PayloadAction<UserData | null>) => {
+          console.log(action);
           state.isLoading = false;
           state.user = action.payload;
         },
@@ -77,5 +82,4 @@ const authSlice = createSlice({
 });
 
 export const { setToken, setTokenFromLocalStorage, logout } = authSlice.actions;
-const authReducer = authSlice.reducer;
-export default authReducer;
+export default authSlice;

@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import testSlice from '@/store/test';
-import authReducer from '@/store/auth';
+import authSlice from '@/store/auth';
 
 // storeに登録
 export const store = configureStore({
   reducer: {
     test: testSlice.reducer,
-    auth: authReducer,
+    auth: authSlice.reducer,
   },
 });
 
