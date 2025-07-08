@@ -1,10 +1,9 @@
-import { Button, Nav } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { logout } from '@/store/auth';
+import { Nav } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
 import styled from '@emotion/styled';
+import LogoutButton from './LogoutButton';
 
 const SidebarStyle = styled.div`
   min-width: 220px;
@@ -20,23 +19,9 @@ const NavLinkStyle = styled(Nav.Link)`
   text-align: left;
 `;
 
-const LogoutStyle = styled(Button)`
-  width: 100%;
-`;
-
 const Sidebar = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.auth.token !== null);
   const user = useSelector((state: RootState) => state.auth.user);
-
-  const handleLogout = () => {
-    // ログアウト処理
-    dispatch(logout());
-
-    // 履歴を残さずログインに遷移
-    navigate('/login', { replace: true });
-  };
 
   return (
     <SidebarStyle className="sidebar d-flex flex-column bg-dark text-white">
@@ -68,12 +53,8 @@ const Sidebar = () => {
       </NavStyle>
       {auth && (
         <div className="p-4">
-          <div className='py-3'>
-            ログイン中 : {user?.name}
-          </div>
-          <LogoutStyle onClick={handleLogout} variant="outline-primary">
-            ログアウト
-          </LogoutStyle>
+          <div className="py-3">ログイン中 : {user?.name}</div>
+          <LogoutButton />
         </div>
       )}
     </SidebarStyle>
