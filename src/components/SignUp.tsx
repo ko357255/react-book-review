@@ -181,6 +181,7 @@ const SignUpForm = () => {
             height={200}
             rounded
             className="border border-dark"
+            loading='lazy'
           />
         </div>
       )}
