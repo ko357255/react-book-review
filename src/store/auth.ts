@@ -70,7 +70,6 @@ const authSlice = createSlice({
       .addCase(
         fetchUser.fulfilled,
         (state, action: PayloadAction<UserData | null>) => {
-          console.log(action);
           state.isLoading = false;
           state.user = action.payload;
         },
