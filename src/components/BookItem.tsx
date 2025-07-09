@@ -35,7 +35,7 @@ const BookItem = ({ book }: { book: BookData }) => {
         <Card.Link
           as={Link}
           to={`/edit/${book.id}`}
-          className="btn btn-outline-primary d-flex align-items-center justify-content-center ms-2"
+          className="btn btn-primary d-flex align-items-center justify-content-center ms-2"
         >
           編集
         </Card.Link>
