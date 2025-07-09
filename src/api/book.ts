@@ -59,10 +59,6 @@ interface BookUpdateResponse {
   isMine: true;
 }
 
-interface BookDeleteRequest {
-  id: string;
-}
-
 export const bookListGet = async (offset: number = 0): Promise<BookData[]> => {
   try {
     const response = await axiosInstance.get('/books', {
@@ -102,10 +98,11 @@ export const bookGet = async (
 };
 
 export const bookUpdate = async (
+  id: string,
   bookData: BookUpdateRquest,
 ): Promise<BookUpdateResponse> => {
   try {
-    const response = await axiosInstance.put('/books', bookData);
+    const response = await axiosInstance.put(`/books/${id}`, bookData);
 
     return response.data;
   } catch (e: unknown) {
@@ -113,9 +110,9 @@ export const bookUpdate = async (
   }
 };
 
-export const bookDelete = async (bookData: BookDeleteRequest) => {
+export const bookDelete = async (id: string) => {
   try {
-    await axiosInstance.delete(`/books/${bookData.id}`);
+    await axiosInstance.delete(`/books/${id}`);
   } catch (e: unknown) {
     return handleError(e);
   }
