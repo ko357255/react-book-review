@@ -1,13 +1,29 @@
 import type { BookData } from '@/api/book';
+import { selectBookLog } from '@/api/log';
 import styled from '@emotion/styled';
 import { Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const DetailButtonStyle = styled(Card.Link)`
+const DetailButtonStyle = styled.div`
   min-width: 70px;
 `;
 
 const BookItem = ({ book }: { book: BookData }) => {
+  const navigate = useNavigate();
+
+  const handleClick = async (id: string) => {
+    try {
+      await selectBookLog({ selectBookId: id });
+      navigate(`/detail/${id}`);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        throw new Error(e.message);
+      } else {
+        throw new Error('予期せぬエラーが発生しました');
+      }
+    }
+  };
+
   return (
     <Card className="mb-3 bg-light" style={{ borderWidth: '1.5px' }}>
       <Card.Body className="d-flex ">
@@ -17,8 +33,7 @@ const BookItem = ({ book }: { book: BookData }) => {
         </div>
         <DetailButtonStyle
           className="btn btn-outline-dark d-flex align-items-center justify-content-center"
-          as={Link}
-          to={`/detail/${book.id}`}
+          onClick={() => handleClick(book.id)}
         >
           詳細
         </DetailButtonStyle>
