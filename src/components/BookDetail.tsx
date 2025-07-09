@@ -1,6 +1,11 @@
 import { bookGet, type BookData } from '@/api/book';
+import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
-import { Card, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Card, Spinner, Table } from 'react-bootstrap';
+
+const ThStyle = styled.th`
+  width: 90px;
+`;
 
 const BookDetail = ({ bookId }: { bookId: string }) => {
   const [book, setBook] = useState<BookData | null>(null);
@@ -34,58 +39,40 @@ const BookDetail = ({ bookId }: { bookId: string }) => {
       {error && <p className="text-danger">{error}</p>}
       {book && (
         <>
-          <Card className="mb-3 bg-light" style={{ borderWidth: '1.5px' }}>
+          <Card className="mb-3 bg-light">
             <Card.Body>
               <Card.Title className="fw-bold fs-4 mb-2">
                 {book.title}
               </Card.Title>
-              <Container>
-                {/* URL */}
-                <Row className="py-2 border-bottom">
-                  <Col xs={3} className="text-end fw-semibold">
-                    URL
-                  </Col>
-                  <Col xs={9}>
-                    <Card.Link
-                      href={book.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {book.url}
-                    </Card.Link>
-                  </Col>
-                </Row>
 
-                {/* 詳細 */}
-                <Row className="py-2 border-bottom">
-                  <Col xs={3} className="text-end fw-semibold">
-                    詳細
-                  </Col>
-                  <Col xs={9}>
-                    <Card.Text>{book.detail}</Card.Text>
-                  </Col>
-                </Row>
-
-                {/* レビュー */}
-                <Row className="py-2 border-bottom">
-                  <Col xs={3} className="text-end fw-semibold">
-                    レビュー
-                  </Col>
-                  <Col xs={9}>
-                    <Card.Text>{book.review}</Card.Text>
-                  </Col>
-                </Row>
-
-                {/* レビュアー */}
-                <Row className="py-2">
-                  <Col xs={3} className="text-end fw-semibold">
-                    レビュアー
-                  </Col>
-                  <Col xs={9}>
-                    <Card.Text>{book.reviewer}</Card.Text>
-                  </Col>
-                </Row>
-              </Container>
+              <Table borderless responsive className="mb-0" variant="light">
+                <tbody>
+                  <tr className="py-2 border-bottom">
+                    <ThStyle className="text-end align-top">URL</ThStyle>
+                    <td>
+                      <Card.Link
+                        href={book.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {book.url}
+                      </Card.Link>
+                    </td>
+                  </tr>
+                  <tr className="py-2 border-bottom">
+                    <ThStyle className="text-end align-top">詳細</ThStyle>
+                    <td>{book.detail}</td>
+                  </tr>
+                  <tr className="py-2 border-bottom">
+                    <ThStyle className="text-end align-top">レビュー</ThStyle>
+                    <td>{book.review}</td>
+                  </tr>
+                  <tr>
+                    <ThStyle className="text-end align-top">レビュアー</ThStyle>
+                    <td>{book.reviewer}</td>
+                  </tr>
+                </tbody>
+              </Table>
             </Card.Body>
           </Card>
         </>
