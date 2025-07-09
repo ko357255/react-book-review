@@ -36,7 +36,7 @@ const BookDetail = ({ bookId }: { bookId: string }) => {
         <>
           <Card className="mb-3 bg-light" style={{ borderWidth: '1.5px' }}>
             <Card.Body>
-              <Card.Title className="fw-bold fs-4 mb-3">
+              <Card.Title className="fw-bold fs-4 mb-2">
                 {book.title}
               </Card.Title>
               <Container>
