@@ -1,5 +1,5 @@
 // import { useEffect, useState } from 'react';
-import { bookGet } from '@/api/book';
+import { bookListGet } from '@/api/book';
 import { Spinner } from 'react-bootstrap';
 import BookItem from '@/components/BookItem';
 import { useQuery } from '@tanstack/react-query';
@@ -14,7 +14,7 @@ const BookList = ({ offset }: { offset: number }) => {
     // 異なるキャッシュかどうかを判別するための値
     queryKey: ['books', offset],
     // データを渡す関数
-    queryFn: () => bookGet(offset),
+    queryFn: () => bookListGet(offset),
     // キャッシュの有効期限
     staleTime: 1000 * 30,
   });

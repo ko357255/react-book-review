@@ -28,7 +28,21 @@ interface BookCreateResponse {
   isMine: boolean;
 }
 
-export const bookGet = async (offset: number = 0): Promise<BookData[]> => {
+interface BookGetRequest {
+  id: string;
+}
+
+interface BookGetResponse {
+  id: string;
+  title: string;
+  url: string;
+  detail: string;
+  review: string;
+  reviewer: string;
+  isMine: true;
+}
+
+export const bookListGet = async (offset: number = 0): Promise<BookData[]> => {
   try {
     const response = await axiosInstance.get('/books', {
       params: {
@@ -38,7 +52,6 @@ export const bookGet = async (offset: number = 0): Promise<BookData[]> => {
 
     return response.data;
   } catch (e: unknown) {
-    // エラーを整形して発生させる
     return handleError(e);
   }
 };
@@ -51,7 +64,18 @@ export const bookCreate = async (
 
     return response.data;
   } catch (e: unknown) {
-    // エラーを整形して発生させる
+    return handleError(e);
+  }
+};
+
+export const bookGet = async (
+  bookData: BookGetRequest,
+): Promise<BookGetResponse> => {
+  try {
+    const response = await axiosInstance.get(`/books/${bookData.id}`);
+
+    return response.data;
+  } catch (e: unknown) {
     return handleError(e);
   }
 };
