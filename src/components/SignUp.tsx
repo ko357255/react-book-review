@@ -6,6 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import FormField from '@/components/FormField';
 import { iconUpload, userCreate } from '@/api/user';
 import styled from '@emotion/styled';
+import { useDispatch } from 'react-redux';
+import { fetchUser, setToken } from '@/store/auth';
+import type { AppDispatch } from '@/store';
 
 interface SignUpFormData {
   name: string;
@@ -27,6 +30,7 @@ const SignUpForm = () => {
   const [compresedIcon, setCompresedIcon] = useState<File | Blob | null>(null);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     register, // 登録関数
@@ -52,8 +56,11 @@ const SignUpForm = () => {
       // アイコンアップロード
       await iconUpload(token, compresedIcon);
 
+      dispatch(setToken(token));
+      dispatch(fetchUser());
       alert('新規登録が完了しました');
-      navigate('/login');
+
+      navigate('/reviews');
     } catch (e: unknown) {
       if (e instanceof Error) {
         setFormError(e.message);
@@ -181,7 +188,7 @@ const SignUpForm = () => {
             height={200}
             rounded
             className="border border-dark"
-            loading='lazy'
+            loading="lazy"
           />
         </div>
       )}
