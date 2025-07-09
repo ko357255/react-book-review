@@ -11,6 +11,7 @@ import styled from '@emotion/styled';
 import Profile from '@/pages/Profile';
 import NewReview from '@/pages/NewReview';
 import ReviewDetail from '@/pages/detail/[id]/ReviewDetail';
+import ReviewEdit from '@/pages/edit/[id]/ReviewEdit';
 
 const MainContentStyle = styled.div`
   height: 100vh;
@@ -34,6 +35,7 @@ const Router = () => {
               <Route path="/profile" element={<Profile />} />
               <Route path="/new" element={<NewReview />} />
               <Route path="/detail/:id" element={<ReviewDetail />} />
+              <Route path="/edit/:id" element={<ReviewEdit />} />
 
               {/* リダイレクト */}
               <Route
