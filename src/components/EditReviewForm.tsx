@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { bookGet, bookUpdate, type BookData } from '@/api/book';
+import { bookDelete, bookGet, bookUpdate, type BookData } from '@/api/book';
 import FormField from '@/components/FormField';
 import { useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 
 interface ReviewFormData {
   title: string;
@@ -18,6 +19,7 @@ const EditReviewForm = ({ bookId }: { bookId: string }) => {
 
   const [book, setBook] = useState<BookData | null>(null);
 
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const {
@@ -61,9 +63,8 @@ const EditReviewForm = ({ bookId }: { bookId: string }) => {
 
   const onSubmit = async ({ title, url, detail, review }: ReviewFormData) => {
     setFormError(null);
-
     if (!book?.id) {
-      setFormError('その書籍レビューは存在しません');
+      setFormError('書籍レビューが見つかりません');
       return;
     }
 
@@ -81,9 +82,39 @@ const EditReviewForm = ({ bookId }: { bookId: string }) => {
         review,
       });
       // キャッシュに再取得を促す
-      queryClient.invalidateQueries({queryKey: ['books']});
+      queryClient.invalidateQueries({ queryKey: ['books'] });
 
       alert(`書籍レビューを編集しました`);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setFormError(e.message);
+      } else {
+        setFormError('予期せぬエラーが発生しました');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    setFormError(null);
+    if (!book?.id) {
+      setFormError('書籍レビューが見つかりません');
+      return;
+    }
+
+    const confirmDelete = window.confirm(
+      'この書籍レビューを本当に削除しますか？',
+    );
+    if (!confirmDelete) return;
+
+    setIsLoading(true);
+
+    try {
+      await bookDelete(book.id);
+      queryClient.invalidateQueries({ queryKey: ['books'] });
+      alert('書籍レビューを削除しました');
+      navigate('/reviews');
     } catch (e: unknown) {
       if (e instanceof Error) {
         setFormError(e.message);
@@ -141,14 +172,23 @@ const EditReviewForm = ({ bookId }: { bookId: string }) => {
         isTouched={touchedFields.review}
       />
 
-      <Button
-        variant="primary"
-        type="submit"
-        className="mb-3"
-        disabled={isLoading}
-      >
-        投稿
-      </Button>
+      <div className="d-flex justify-content-start mb-3">
+        <Button
+          variant="primary"
+          type="submit"
+          disabled={isLoading}
+        >
+          投稿
+        </Button>
+        <Button
+          variant="danger"
+          className='ms-2'
+          onClick={handleDelete}
+          disabled={isLoading}
+        >
+          削除
+        </Button>
+      </div>
 
       {/* フォームエラー */}
       {formError && <div className="text-danger">{formError}</div>}
