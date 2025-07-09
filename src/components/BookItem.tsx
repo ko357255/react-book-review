@@ -1,12 +1,9 @@
 import type { BookData } from '@/api/book';
 import { selectBookLog } from '@/api/log';
-import styled from '@emotion/styled';
 import { Card } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const DetailButtonStyle = styled.div`
-  min-width: 70px;
-`;
+
 
 const BookItem = ({ book }: { book: BookData }) => {
   const navigate = useNavigate();
@@ -31,12 +28,19 @@ const BookItem = ({ book }: { book: BookData }) => {
           <Card.Title>{book.title}</Card.Title>
           <Card.Text>{book.detail}</Card.Text>
         </div>
-        <DetailButtonStyle
+        <div
           className="btn btn-outline-dark d-flex align-items-center justify-content-center"
           onClick={() => handleClick(book.id)}
         >
           詳細
-        </DetailButtonStyle>
+        </div>
+        <Card.Link
+          as={Link}
+          to={`/edit/${book.id}`}
+          className="btn btn-outline-primary d-flex align-items-center justify-content-center ms-2"
+        >
+          編集
+        </Card.Link>
       </Card.Body>
     </Card>
   );

@@ -45,7 +45,7 @@ const EditReviewForm = ({ bookId }: { bookId: string }) => {
       }
     };
     fetchBook();
-  }, [bookId, setIsLoading]);
+  }, [bookId]);
 
   useEffect(() => {
     reset({
@@ -54,7 +54,7 @@ const EditReviewForm = ({ bookId }: { bookId: string }) => {
       detail: book?.detail || '',
       review: book?.review || '',
     });
-  });
+  }, [book, reset]);
 
   const onSubmit = async ({ title, url, detail, review }: ReviewFormData) => {
     setFormError(null);
@@ -130,7 +130,7 @@ const EditReviewForm = ({ bookId }: { bookId: string }) => {
         id="review"
         type="text"
         registerProps={register('review', {
-          required: '感想',
+          required: '感想を入力してください',
         })}
         error={errors.review?.message}
         isTouched={touchedFields.review}
