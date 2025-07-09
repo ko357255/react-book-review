@@ -42,6 +42,27 @@ interface BookGetResponse {
   isMine: true;
 }
 
+interface BookUpdateRquest {
+  title: string;
+  url: string;
+  detail: string;
+  review: string;
+}
+
+interface BookUpdateResponse {
+  id: string;
+  title: string;
+  url: string;
+  detail: string;
+  review: string;
+  reviewer: string;
+  isMine: true;
+}
+
+interface BookDeleteRequest {
+  id: string;
+}
+
 export const bookListGet = async (offset: number = 0): Promise<BookData[]> => {
   try {
     const response = await axiosInstance.get('/books', {
@@ -75,6 +96,26 @@ export const bookGet = async (
     const response = await axiosInstance.get(`/books/${bookData.id}`);
 
     return response.data;
+  } catch (e: unknown) {
+    return handleError(e);
+  }
+};
+
+export const bookUpdate = async (
+  bookData: BookUpdateRquest,
+): Promise<BookUpdateResponse> => {
+  try {
+    const response = await axiosInstance.put('/books', bookData);
+
+    return response.data;
+  } catch (e: unknown) {
+    return handleError(e);
+  }
+};
+
+export const bookDelete = async (bookData: BookDeleteRequest) => {
+  try {
+    await axiosInstance.delete(`/books/${bookData.id}`);
   } catch (e: unknown) {
     return handleError(e);
   }
