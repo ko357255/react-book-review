@@ -6,7 +6,9 @@ import styled from '@emotion/styled';
 import LogoutButton from './LogoutButton';
 
 const SidebarStyle = styled.div`
+  width: 220px;
   min-width: 220px;
+  max-width: 220px;
   height: 100vh;
 `;
 

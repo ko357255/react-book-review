@@ -8,6 +8,7 @@ import type { RootState } from '@/store';
 
 interface UserData {
   name: string;
+  iconUrl: string;
 }
 
 interface AuthState {

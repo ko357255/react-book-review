@@ -55,7 +55,7 @@ export const userCreate = async (
 
 // アイコンアップロード関数
 export const iconUpload = async (
-  token: string,
+  token: string | null,
   file: File | Blob,
 ): Promise<IconUploadResponse> => {
   const formData = new FormData();

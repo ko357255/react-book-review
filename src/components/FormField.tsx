@@ -10,6 +10,7 @@ interface Props {
   registerProps: UseFormRegisterReturn; // バリデーションの登録
   error?: string; // フォームのエラーメッセージ
   isTouched?: boolean; // フォームに触れたかどうか
+  isValidStyle?: boolean; // バリデートスタイルの有無
 }
 
 const FormField = ({
@@ -21,6 +22,7 @@ const FormField = ({
   registerProps,
   error,
   isTouched,
+  isValidStyle = true,
 }: Props) => (
   <Form.Group className="mb-3" controlId={id}>
     <Form.Label>{label}</Form.Label>
@@ -30,8 +32,8 @@ const FormField = ({
       placeholder={placeholder}
       accept={accept}
       {...registerProps}
-      isInvalid={!!error} // エラースタイル
-      isValid={isTouched && !error} // 完了スタイル
+      isInvalid={!!error && isValidStyle} // エラースタイル
+      isValid={isTouched && !error && isValidStyle} // 完了スタイル
     />
     <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
   </Form.Group>
