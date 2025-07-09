@@ -3,6 +3,7 @@ import { Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { bookGet, bookUpdate, type BookData } from '@/api/book';
 import FormField from '@/components/FormField';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ReviewFormData {
   title: string;
@@ -16,6 +17,8 @@ const EditReviewForm = ({ bookId }: { bookId: string }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [book, setBook] = useState<BookData | null>(null);
+
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -58,18 +61,18 @@ const EditReviewForm = ({ bookId }: { bookId: string }) => {
 
   const onSubmit = async ({ title, url, detail, review }: ReviewFormData) => {
     setFormError(null);
-    setIsLoading(true);
 
     if (!book?.id) {
       setFormError('その書籍レビューは存在しません');
       return;
     }
 
-    if (!book?.isMine) {
-      setFormError('レビューを編集する権限がありません');
-      return;
-    }
+    // if (!book?.isMine) {
+    //   setFormError('レビューを編集する権限がありません');
+    //   return;
+    // }
 
+    setIsLoading(true);
     try {
       await bookUpdate(book?.id, {
         title,
@@ -77,6 +80,8 @@ const EditReviewForm = ({ bookId }: { bookId: string }) => {
         detail,
         review,
       });
+      // キャッシュに再取得を促す
+      queryClient.invalidateQueries({queryKey: ['books']});
 
       alert(`書籍レビューを編集しました`);
     } catch (e: unknown) {
