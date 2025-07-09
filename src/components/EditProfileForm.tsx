@@ -12,7 +12,7 @@ interface SignUpFormData {
   name: string;
 }
 
-const ProfileEditForm = () => {
+const EditProfileForm = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [formError, setFormError] = useState<string | null>(null);
@@ -90,4 +90,4 @@ const ProfileEditForm = () => {
   );
 };
 
-export default ProfileEditForm;
+export default EditProfileForm;

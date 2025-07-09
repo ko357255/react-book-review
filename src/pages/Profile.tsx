@@ -1,4 +1,4 @@
-import ProfileEditForm from '@/components/ProfileEditForm';
+import EditProfileForm from '@/components/EditProfileForm';
 
 const Profile = () => {
   return (
@@ -10,7 +10,7 @@ const Profile = () => {
       />
 
       <h2 className="mb-3">プロフィール編集</h2>
-      <ProfileEditForm />
+      <EditProfileForm />
     </div>
   );
 };
