@@ -74,7 +74,7 @@ const NewReviewForm = () => {
         id="detail"
         type="text"
         registerProps={register('detail', {
-          required: '書籍詳細情報',
+          required: '書籍詳細情報を入力してください',
         })}
         error={errors.detail?.message}
         isTouched={touchedFields.detail}
@@ -85,7 +85,7 @@ const NewReviewForm = () => {
         id="review"
         type="text"
         registerProps={register('review', {
-          required: '感想',
+          required: '感想を入力してください',
         })}
         error={errors.review?.message}
         isTouched={touchedFields.review}
