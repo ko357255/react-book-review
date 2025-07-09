@@ -37,7 +37,7 @@ const LoginForm = () => {
       // トークンをストアとローカルストレージにセット
       dispath(setToken(token));
       dispath(fetchUser());
-      
+
       navigate('/reviews');
     } catch (e: unknown) {
       if (e instanceof Error) {

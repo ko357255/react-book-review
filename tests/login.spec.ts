@@ -15,7 +15,7 @@ test.describe('ログインフォームのバリデーション', () => {
     // + : 直後の隣の要素を取得する
     const emailError = page.locator('input#email + .invalid-feedback');
     await expect(emailError).toHaveText('メールアドレスを入力してください');
-    
+
     // パスワードフィールドのエラーメッセージが表示されないことを確認
     const passwordError = page.locator('input#password + .invalid-feedback');
     await expect(passwordError).not.toBeVisible();
@@ -31,7 +31,7 @@ test.describe('ログインフォームのバリデーション', () => {
 
     const passwordError = page.locator('input#password + .invalid-feedback');
     await expect(passwordError).toHaveText('パスワードを入力してください');
-    
+
     const emailError = page.locator('input#email + .invalid-feedback');
     await expect(emailError).not.toBeVisible();
   });
@@ -47,7 +47,7 @@ test.describe('ログインフォームのバリデーション', () => {
 
     const emailError = page.locator('input#email + .invalid-feedback');
     await expect(emailError).toHaveText('メールアドレスを入力してください');
-    
+
     const passwordError = page.locator('input#password + .invalid-feedback');
     await expect(passwordError).toHaveText('パスワードを入力してください');
   });

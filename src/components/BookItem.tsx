@@ -3,8 +3,6 @@ import { selectBookLog } from '@/api/log';
 import { Card } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 
-
-
 const BookItem = ({ book }: { book: BookData }) => {
   const navigate = useNavigate();
 

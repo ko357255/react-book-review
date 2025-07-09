@@ -173,16 +173,12 @@ const EditReviewForm = ({ bookId }: { bookId: string }) => {
       />
 
       <div className="d-flex justify-content-start mb-3">
-        <Button
-          variant="primary"
-          type="submit"
-          disabled={isLoading}
-        >
+        <Button variant="primary" type="submit" disabled={isLoading}>
           投稿
         </Button>
         <Button
           variant="danger"
-          className='ms-2'
+          className="ms-2"
           onClick={handleDelete}
           disabled={isLoading}
         >

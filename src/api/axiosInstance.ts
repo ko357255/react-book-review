@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use((config) => {
   // useSelector() はコンポーネント内でしか使えないため
   // store.getState()を使用する
-  const token = localStorage.getItem('authToken')
+  const token = localStorage.getItem('authToken');
   if (token) {
     // ヘッダーに認証情報を付与
     config.headers['Authorization'] = `Bearer ${token}`;
