@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import FormField from '@/components/FormField';
 import { bookCreate } from '@/api/book';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ReviewFormData {
   title: string;
@@ -24,6 +25,7 @@ const NewReviewForm = () => {
   });
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const onSubmit = async ({ title, url, detail, review }: ReviewFormData) => {
     setFormError(null);
@@ -32,6 +34,8 @@ const NewReviewForm = () => {
     try {
       const newReview = await bookCreate({ title, url, detail, review });
       alert(`レビューを投稿しました ${newReview.title}`);
+
+      queryClient.invalidateQueries({ queryKey: ['books'] });
 
       navigate('/reviews');
     } catch (e: unknown) {

@@ -68,10 +68,10 @@ const EditReviewForm = ({ bookId }: { bookId: string }) => {
       return;
     }
 
-    // if (!book?.isMine) {
-    //   setFormError('レビューを編集する権限がありません');
-    //   return;
-    // }
+    if (!book?.isMine) {
+      setFormError('レビューを編集する権限がありません');
+      return;
+    }
 
     setIsLoading(true);
     try {
@@ -100,6 +100,11 @@ const EditReviewForm = ({ bookId }: { bookId: string }) => {
     setFormError(null);
     if (!book?.id) {
       setFormError('書籍レビューが見つかりません');
+      return;
+    }
+
+    if (!book?.isMine) {
+      setFormError('レビューを編集する権限がありません');
       return;
     }
 
@@ -174,7 +179,7 @@ const EditReviewForm = ({ bookId }: { bookId: string }) => {
 
       <div className="d-flex justify-content-start mb-3">
         <Button variant="primary" type="submit" disabled={isLoading}>
-          投稿
+          編集
         </Button>
         <Button
           variant="danger"

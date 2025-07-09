@@ -32,13 +32,15 @@ const BookItem = ({ book }: { book: BookData }) => {
         >
           詳細
         </div>
-        <Card.Link
-          as={Link}
-          to={`/edit/${book.id}`}
-          className="btn btn-primary d-flex align-items-center justify-content-center ms-2"
-        >
-          編集
-        </Card.Link>
+        {book.isMine && (
+          <Card.Link
+            as={Link}
+            to={`/edit/${book.id}`}
+            className="btn btn-primary d-flex align-items-center justify-content-center ms-2"
+          >
+            編集
+          </Card.Link>
+        )}
       </Card.Body>
     </Card>
   );
